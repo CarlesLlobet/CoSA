@@ -1,0 +1,168 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static '/static/favicon.ico' %}">
+
+{% block content %}
+    <br><br>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">{% if finished == 'no' %}Dashboard{% elif finished == "si" %}Finished Tasks{% endif %}</h1>
+                <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+             </div>
+
+            <div class="panel-body">
+                <table class="table table-responsive table-striped table-bordered table-hover" id="dataTable-myTasks">
+                    <thead>
+                    <tr>
+                        {% if user.is_staff %}
+                            <th>User</th>
+                        {% endif %}
+                        <th>Tool</th>
+                        <th>Name</th>
+                        <th>State</th>
+                        <th>Target</th>
+                        <th>Insertion date</th>
+                        <th>Mail</th>
+                    </tr>
+                    </thead>
+                    <tbody style="cursor: pointer;">
+                    {% for t in tasks %}
+                        {% if t.state == 'Finished' %}
+                        <tr class="success" {% if t.tool == "SQLmap" %}
+                            onclick="window.location.href='{% url 'sqlmap_task' t.id %}'" {% elif t.tool == "OpenVAS" %}
+                            onclick="window.location.href='{% url 'openvas_task' t.id %}'" {% else %}
+                            onclick="window.location.href='{% url 'w3af_task' t.id %}'"
+                            {% endif %}>
+                                {% if user.is_staff %}
+                                    <td>{{ t.username }}</td>
+                                {% endif %}
+                                {% if t.tool == 'OpenVAS' %}
+                                    <td><i class="fa fa-tachometer fa-fw"></i> OpenVAS</td>
+                                {% elif t.tool == 'SQLmap' %}
+                                    <td><i class="fa fa-database fa-fw"></i> SQLmap</td>
+                                {% elif t.tool == 'w3af' %}
+                                    <td><i class="fa fa-shield fa-fw"></i> w3af</td>
+                                {% endif %}
+                                <td>{{ t.name }}</td>
+                                <td>{{ t.state }}</td>
+                                <td>{{ t.target }}</td>
+                                <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                {% if t.mail %}
+                                    <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                    <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                            </tr>
+                        {% endif %}
+                        {% if t.state == 'Running' and finished == "no" %}
+                            <tr class="info" {% if t.tool == "SQLmap" %}
+                                onclick="window.location.href='{% url 'sqlmap_task' t.id %}'"{% elif t.tool == "OpenVAS" %}
+                                onclick="window.location.href='{% url 'openvas_task' t.id %}'" {% elif t.tool == "w3af" %}
+                                onclick="window.location.href='{% url 'w3af_task' t.id %}'"
+                            {% endif %}>
+                                {% if user.is_staff %}
+                                    <td>{{ t.username }}</td>
+                                {% endif %}
+                                {% if t.tool == 'SQLmap' %}
+                                    <td><i class="fa fa-database fa-fw"></i> SQLmap</td>
+                                {% elif t.tool == 'OpenVAS' %}
+                                    <td><i class="fa fa-tachometer fa-fw"></i> OpenVAS</td>
+                                {% elif t.tool == 'w3af' %}
+                                    <td><i class="fa fa-shield fa-fw"></i> w3af</td>
+                                {% endif %}
+                                <td>{{ t.name }}</td>
+                                {% if t.tool == 'OpenVAS' %}
+                                    <td>{{ t.state }} ({{ t.percentage }}%)</td>
+                                {% else %}
+                                    <td>{{ t.state }}</td>
+                                {% endif %}
+                                <td>{{ t.target }}</td>
+                                <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                {% if t.mail %}
+                                    <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                    <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                            </tr>
+                        {% endif %}
+                        {% if t.state == 'On Hold' and finished == "no" %}
+                            <tr class="warning" {% if t.tool == "SQLmap" %}
+                                onclick="window.location.href='{% url 'sqlmap_task' t.id %}'" {% elif t.tool == "OpenVAS" %}
+                                onclick="window.location.href='{% url 'openvas_task' t.id %}'" {% elif t.tool == "w3af" %}
+                                onclick="window.location.href='{% url 'w3af_task' t.id %}'"
+                            {% endif %}>
+                                {% if user.is_staff %}
+                                    <td>{{ t.username }}</td>
+                                {% endif %}
+                                {% if t.tool == 'SQLmap' %}
+                                    <td><i class="fa fa-database fa-fw"></i> SQLmap</td>
+                                {% elif t.tool == 'OpenVAS' %}
+                                    <td><i class="fa fa-tachometer fa-fw"></i> OpenVAS</td>
+                                {% elif t.tool == "w3af" %}
+                                    <td><i class="fa fa-shield fa-fw"></i> w3af</td>
+                                {% endif %}
+                                <td>{{ t.name }}</td>
+                                <td>{{ t.state }} ({{ t.pos }}º)</td>
+                                <td>{{ t.target }}</td>
+                                <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                {% if t.mail %}
+                                    <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                    <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                            </tr>
+                        {% endif %}
+                        {% if t.state == 'Blocked' and finished == "no" %}
+                            <tr class="danger" {% if t.tool == "SQLmap" %}
+                                onclick="window.location.href='{% url 'sqlmap_task' t.id %}'" {% elif t.tool == "OpenVAS" %}
+                                onclick="window.location.href='{% url 'openvas_task' t.id %}'" {% elif t.tool == "w3af" %}
+                                onclick="window.location.href='{% url 'w3af_task' t.id %}'"
+                            {% endif %}>
+                                {% if user.is_staff %}
+                                    <td>{{ t.username }}</td>
+                                {% endif %}
+                                {% if t.tool == 'SQLmap' %}
+                                    <td><i class="fa fa-database fa-fw"></i> SQLmap</td>
+                                {% elif t.tool == 'OpenVAS' %}
+                                    <td><i class="fa fa-tachometer fa-fw"></i> OpenVAS</td>
+                                {% elif t.tool == "w3af" %}
+                                    <td><i class="fa fa-shield fa-fw"></i> w3af</td>
+                                {% endif %}
+                                <td>{{ t.name }}</td>
+                                <td>{{ t.state }}</td>
+                                <td>{{ t.target }}</td>
+                                <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                {% if t.mail %}
+                                    <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                    <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                            </tr>
+                        {% endif %}
+                        {% if t.state == 'Saved' and finished == "no" %}
+                            <tr class="warning" {% if t.tool == "SQLmap" %}
+                                onclick="window.location.href='{% url 'sqlmap_task' t.id %}'" {% elif t.tool == "OpenVAS" %}
+                                onclick="window.location.href='{% url 'openvas_task' t.id %}'" {% elif t.tool == "w3af" %}
+                                onclick="window.location.href='{% url 'w3af_task' t.id %}'"
+                            {% endif %}>
+                                {% if user.is_staff %}
+                                    <td>{{ t.username }}</td>
+                                {% endif %}
+                                {% if t.tool == 'SQLmap' %}
+                                    <td><i class="fa fa-database fa-fw"></i> SQLmap</td>
+                                {% elif t.tool == 'OpenVAS' %}
+                                    <td><i class="fa fa-tachometer fa-fw"></i> OpenVAS</td>
+                                {% elif t.tool == "w3af" %}
+                                    <td><i class="fa fa-shield fa-fw"></i> w3af</td>
+                                {% endif %}
+                                <td>{{ t.name }}</td>
+                                <td>{{ t.state }}</td>
+                                <td>{{ t.target }}</td>
+                                <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                {% if t.mail %}
+                                    <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                    <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <!--
+    <div class="img">
+        <img src="img/logo-ApTester.png">
+    </div>
+    -->
+
+    <!-- Bootstrap Core CSS -->
+    <link href={% static  "bower_components/bootstrap/dist/css/bootstrap.min.css" %} rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href={% static  "bower_components/metisMenu/dist/metisMenu.min.css" %} rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href={% static  "dist/css/timeline.css" %} rel="stylesheet">
+
+    <!-- Slider CSS -->
+    <link href={% static  "dist/css/slider.css" %} rel="stylesheet" type=\"text/css\" media=\"screen\">
+
+    <!-- SQLmap Report CSS -->
+    <link href={% static  "dist/css/style.css" %} rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href={% static  "bower_components/morrisjs/morris.css" %} rel="stylesheet">
+
+    <!-- Slider -->
+    <link href={% static  "css/slider.css" %} rel="stylesheet">
+
+    <!-- DatePicker -->
+    <script src={% static  "bower_components/jquery/dist/jquery.min.js" %}></script>
+    <script src={% static  "bower_components/bootstrap/dist/js/bootstrap.min.js" %}></script>
+    <link rel="stylesheet"
+          href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.css">
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+    {{ form.media }}
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    {% include 'sidebar.html' %}
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        {% block content %}{% endblock %}
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>© 2APT (Applus Automated Pentesting Toolkit) es un producto de <a href="https://www.appluslaboratories.com/es/" target="_blank">Applus+ Laboratories, S.A.</a>
+        2019-2019. Todos los derechos reservados. &nbsp;</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src={% static  "bower_components/metisMenu/dist/metisMenu.min.js" %}></script>
+
+<!-- Morris Charts JavaScript -->
+<script src={% static  "bower_components/raphael/raphael-min.js" %}></script>
+<script src={% static  "bower_components/morrisjs/morris.min.js" %}></script>
+
+<!-- Slider JavaScript-->
+<script src={% static  "js/bootstrap-slider.js" %}></script>
+
+<!-- Custom Theme JavaScript -->
+<script src={% static  "dist/js/sb-admin-2.js" %}></script>
+
+<!-- Javascripts de taules -->
+<script src={% static  "bower_components/datatables/media/js/jquery.dataTables.min.js" %}></script>
+<script src={% static  "bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js" %}></script>
+
+<!-- Javascript de sliders -->
+<script src={% static "js/bootstrap-slider.js" %}></script>
+
+<!-- Taula de peticions -->
+<script>
+    $(document).ready(function () {
+        //Pujar periodicities
+        if (!$("#id_mail_field").val()) {
+            $("#id_mail_field").val("{{ user.username }}@applus.com");
+            $("#mail_field").slideUp(0);
+            $("#mail").prop('checked', false);
+        }
+        else {
+            $("#mail_field").slideDown(0);
+        }
+        if (!$("#id_execute_date").val()) {
+            $("#periodicitat_menu").slideUp(0);
+            $("#periodicity_checkbox").prop('checked', false);
+        } else {
+            $("#periodicitat_menu").slideDown(0);
+        }
+        $("#periodicitat_menu").display = "visible";
+        $("#mail_field").display = "visible";
+        // Ordenar taula general
+        $('#dataTable-myTasks').DataTable({
+            responsive: true,
+            {% if user.is_staff %} order: [[5, 'desc']],
+            {% else %} order: [[4, 'desc']],
+            {% endif %}
+        });
+        // Ordenar taula SQLmap
+        $('#dataTable-SQLmap').DataTable({
+            responsive: true,
+            {% if user.is_staff %} order: [[9, 'desc']],
+            {% else %} order: [[8, 'desc']],
+            {% endif %}
+        });
+        //Ordenar taula OpenVAS
+        $('#dataTable-OpenVAS').DataTable({
+            responsive: true,
+            {% if user.is_staff %} order: [[5, 'desc']],
+            {% else %} order: [[4, 'desc']],
+            {% endif %}
+        });
+    });
+</script>
+
+<script>
+    $('#periodicity_checkbox').click(function () {
+        if (this.checked == true) {
+            $("#periodicitat_menu").slideDown();
+        } else {
+            $("#periodicitat_menu").slideUp();
+        }
+    });
+</script>
+
+<script>
+    $('#mail').click(function () {
+        if (this.checked == true) {
+            $("#mail_field").slideDown();
+        } else {
+            $("#mail_field").slideUp();
+        }
+    });
+</script>
+
+<!-- Sliders -->
+<script>
+    $('#verbosity').slider({
+        formatter: function (value) {
+            return 'Current value: ' + value;
+        }
+    });
+    $('#level').slider({
+        formatter: function (value) {
+            return 'Current value: ' + value;
+        }
+    });
+    $('#risk').slider({
+        formatter: function (value) {
+            return 'Current value: ' + value;
+        }
+    });
+    $('#depth').slider({
+        formatter: function (value) {
+            return 'Current value: ' + value;
+        }
+    });
+</script>
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+</body>
+
+</html>

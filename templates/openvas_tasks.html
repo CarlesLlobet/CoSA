@@ -1,0 +1,113 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+    <br><br>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">OpenVAS Tasks</h1>
+             </div>
+            <div class="panel-body">
+                <table class="table table-responsive table-striped table-bordered table-hover" id="dataTable-OpenVAS">
+                    <thead>
+                    <tr>
+                        {% if user.is_staff %}
+                            <th>User</th>
+                        {% endif %}
+                        <th>Name</th>
+                        <th>State</th>
+                        <th>Target</th>
+                        <th>Scan type</th>
+                        <th>Insertion date</th>
+                        <th>Mail</th>
+                    </tr>
+                    </thead>
+                    <tbody style="cursor: pointer;">
+                    {% for t in tasks %}
+                        {% if t.tool == 'OpenVAS' %}
+                            {% if t.state == 'Finished' %}
+                                <tr class="success" onclick="window.location.href='{% url 'openvas_task' t.id %}'">
+                                    {% if user.is_staff %}
+                                        <td>{{ t.username }}</td>
+                                    {% endif %}
+                                    <td>{{ t.name }}</td>
+                                    <td>{{ t.state }}</td>
+                                    <td>{{ t.target }}</td>
+                                    <td>{{ t.config }}</td>
+                                    <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                    {% if t.mail %}
+                                        <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                        <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                                </tr>
+                            {% endif %}
+                            {% if t.state == 'Running' %}
+                                <tr class="info" onclick="window.location.href='{% url 'openvas_task' t.id %}'">
+                                    {% if user.is_staff %}
+                                        <td>{{ t.username }}</td>
+                                    {% endif %}
+                                    <td>{{ t.name }}</td>
+                                    <td>{{ t.state }} ({{ t.percentage }}%)</td>
+                                    <td>{{ t.target }}</td>
+                                    <td>{{ t.config }}</td>
+                                    <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                    {% if t.mail %}
+                                        <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                        <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                                </tr>
+                            {% endif %}
+                            {% if t.state == 'On Hold' %}
+                                <tr class="warning" onclick="window.location.href='{% url 'openvas_task' t.id %}'">
+                                    {% if user.is_staff %}
+                                        <td>{{ t.username }}</td>
+                                    {% endif %}
+                                    <td>{{ t.name }}</td>
+                                    <td>{{ t.state }}({{ t.pos }}º)</td>
+                                    <td>{{ t.target }}</td>
+                                    <td>{{ t.config }}</td>
+                                    <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                    {% if t.mail %}
+                                        <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                        <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                                </tr>
+                            {% endif %}
+                            {% if t.state == 'Blocked' %}
+                                <tr class="danger" onclick="window.location.href='{% url 'openvas_task' t.id %}'">
+                                    {% if user.is_staff %}
+                                        <td>{{ t.username }}</td>
+                                    {% endif %}
+                                    <td>{{ t.name }}</td>
+                                    <td>{{ t.state }}</td>
+                                    <td>{{ t.target }}</td>
+                                    <td>{{ t.config }}</td>
+                                    <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                    {% if t.mail %}
+                                        <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                        <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                                </tr>
+                            {% endif %}
+                            {% if t.state == 'Saved' %}
+                                <tr class="warning" onclick="window.location.href='{% url 'openvas_task' t.id %}'">
+                                    {% if user.is_staff %}
+                                        <td>{{ t.username }}</td>
+                                    {% endif %}
+                                    <td>{{ t.name }}</td>
+                                    <td>{{ t.state }}</td>
+                                    <td>{{ t.target }}</td>
+                                    <td>{{ t.config }}</td>
+                                    <td>{{ t.insert_date|date:"m/d/Y H:i:s" }}</td>
+                                    {% if t.mail %}
+                                        <td><i class="fa fa-check fa-fw" style="color: green"></i></td>{% else %}
+                                        <td><i class="fa fa-times fa-fw" style="color: red"></i></td>{% endif %}
+                                </tr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

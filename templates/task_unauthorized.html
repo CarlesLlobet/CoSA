@@ -1,0 +1,27 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+    <br><br>
+    <div class="col-md-12">
+        <center>
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    You can not see this task
+                </div>
+                <div class="panel-body">
+                    <p>The task you are looking for is not available to you. In 2APT you can only see your own tasks.
+                        Go back to the Dashboard to see the tasks that belong to you.</p>
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-default"
+                            onclick="window.location.href='/'">
+                        My tasks
+                    </button>
+                </div>
+            </div>
+        </center>
+    </div>
+{% endblock content %}

@@ -1,0 +1,81 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <!-- <div class="sidebar-brand-text mx-3">ApTester</div> -->
+        <img class="img-fluid" src="/static/img/white_logo.png">
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item {{ index }}">
+        <a class="nav-link" href="/">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Tools
+    </div>
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link {% if not openvas_tasks and not openvas_new %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseOpenVAS"
+               aria-expanded="true" aria-controls="collapseOpenVAS">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>OpenVAS</span>
+            </a>
+            <div id="collapseOpenVAS" class="collapse {% if openvas_tasks or openvas_new %}show{% endif %}" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ openvas_tasks }}" href="{% url 'openvas_tasks' %}">Tasks</a>
+                    <a class="collapse-item {{ openvas_new }}" href="{% url 'openvas_new' %}">New task</a>
+                </div>
+            </div>
+        </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Others
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link {% if not openvas_howto %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseGuides"
+           aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Usage Guides</span>
+        </a>
+        <div id="collapseGuides" class="collapse {% if openvas_howto %}show{% endif %}" aria-labelledby="headingUtilities"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ openvas_howto }}" href="{% url 'openvas_howto' %}">OpenVAS</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="/admin">
+            <i class="fas fa-fw fa-user-cog"></i>
+            <span>Admin Panel</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->

@@ -1,0 +1,115 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+    <br><br>
+    {% if results == "fail" %}
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <i class="fa fa-exclamation-circle"></i> <strong>This task does not have report yet</strong>
+        </div>
+    {% endif %}
+    {% if task.modify_date and results.finish_date %}
+        {% if task.modify_date > results.finish_date %}
+            <div class="alert alert-warning alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <i class="fa fa-exclamation-circle"></i> <strong>This task was modified after obtaining this results, so the parameters and the obtained results might not fit.</strong>
+            </div>
+        {% endif %}
+    {% endif %}
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">OpenVAS Tasks</h1>
+                <h1><i class="fa fa-tachometer fa-fw"></i> Task: {{ task.name }} </h1>
+    </div>
+    <div class="col-md-5">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Task information
+                </div>
+                <div class="panel-body">
+                    {% if user.is_staff %}
+                        <p>
+                            <strong>User: </strong> {{ task.user }}
+                        </p>
+                    {% endif %}
+                    <p>
+                        <strong>State: </strong>
+                        {{ task.state }}{% if task.state == "Running" %} ({{ task.percentage }}%) {% endif %}
+                        {% if task.state != "On Hold" %}
+                            <div class="progress progress-striped" style="width: 50%">
+                                <div {% if task.state == "Finished" %}
+                                    class="progress-bar progress-bar-success" aria-valuenow="100"
+                                    style="width: 100%"
+                                {% elif task.state == "Running" %}
+                                    class="progress-bar progress-bar-info active"
+                                    aria-valuenow="{{ t.percentage }}"
+                                    style="width: {{ t.percentage }}%"
+                                {% elif task.state == "Blocked" %}
+                                    class="progress-bar progress-bar-danger active" aria-valuenow="30"
+                                    style="width: 30%"{% endif %}
+                                    role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="sr-only">Task info</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </p>
+                    <p>
+                        <strong>Target: </strong> {{ task.target }}
+                    </p>
+                    <p>
+                        <strong>Scan type: </strong> {{ task.config }}
+                    </p>
+                    <p>
+                        <strong>Insertion date: </strong> {{ task.insert_date }}
+                    </p>
+                    {% if task.modify_date %}
+                        <p>
+                            <strong>Last modification: </strong> {{ task.modify_date }}
+                        </p>
+                    {% endif %}
+                    <p>
+                        <strong>Mail: </strong> {% if task.mail %}
+                        <td>Yest ({{ task.mail }})</td>{% else %}
+                        <td>No</td>{% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7 align-center">
+        <button type="submit"
+                class="btn btn-primary {% if task.state == "Running" or task.state == "On Hold" or task.state == "Blocked" or task.state == "Deleted" %}disabled" disabled="disabled{% endif %}"
+                onclick="window.location.href='{% url 'openvas_relaunch' task.id %}'">
+            Execute
+        </button>
+        <button type="submit"
+                class="btn btn-default {% if task.state == "Running" or task.state == "Blocked" or task.state == "Deleted" %}disabled" disabled="disabled{% endif %}"
+                onclick="window.location.href='{% url 'openvas_modify' task.id %}'">
+            Modify
+        </button>
+        <button type="submit"
+                class="btn btn-danger {% if task.state == "Blocked" or task.state == "Deleted" %}disabled" disabled="disabled{% endif %}"
+                onclick="window.location.href='{% url 'openvas_delete' task.id %}'">
+            Delete
+        </button>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                Results ({{ results.finish_date }})
+                <button type="submit"
+                        class="btn btn-primary pull-right {% if not results.report %}disabled" disabled="disabled{% endif %}"
+                        onclick="window.location.href='{% url 'openvas_download' task.id %}'">Download Full Report
+                </button>
+            </div>
+            <div class="panel-body">
+                <pre style="font-family: 'Lucida Console', Monaco, monospace">
+                    {{ results.output|safe }}
+                </pre>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

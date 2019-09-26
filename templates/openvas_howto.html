@@ -1,0 +1,78 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">OpenVAS
+                    <small>Usage guide</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <!-- Body -->
+    <a href="http://www.openvas.org/" target="_blank"><img src={% static "img/openvas_logo.png" %} width=25% alt="OpenVAS" border="0"/></a>
+    <h2> What is it? </h2>
+    OpenVAS is a framework of different services and tools that offers a powerful and comprehensible solution of scanning and managing vulnerabilities.
+    <h2> How to use it? </h2>
+    <center>
+        <img src={% static "Captures/OpenVAS_newTask_numbered.PNG" %} width=75% alt="OpenVAS_tool"
+             style="border:1px solid black;">
+    </center>
+    <h3>Name</h3>
+    <p>
+        This field allows us to identify the task<br>
+        It is mandatory to introduce it to be able to differentiate our many tasks, even if they are pointing to the same target, but with different configurations.
+    </p>
+    <h3>Target</h3>
+    <p>
+        This field defines the hosts we want to scan over.
+        We have two options, and can choose between them or use both:
+    <ul>
+        <li>
+            <strong>Domain:</strong> Here we are capable of inserting domains so OpenVAS resolves them for us, separated by comma, and with the unique condition that they have to be complete to be able to found the servers.
+        </li>
+        <br>
+        <li>
+            <strong>IPs:</strong> Here we can insert IPs separated by comma of the hosts we want to scan directly. In case we want to add a whole network (e.g: 147.83.1.0/24), you will need a special permission from the administrator.
+        </li>
+    </ul>
+    </p>
+    <h3>Parameters</h3>
+    <ul>
+        <li>
+            <strong>Scanning type:</strong> Defines the scan level that will be requested to OpenVAS. It consists in 5 levels:
+            <ul>
+                <li>
+                    <strong>Discovery</strong>: Only shows python error and critical messages.
+                </li>
+                <li>
+                    <strong>Full and fast</strong>: It also shows useful information and alert messages.
+                </li>
+                <li>
+                    <strong>Full and fast ultimate</strong>: It also shows debug messages.
+                </li>
+                <li>
+                    <strong>Full and very deep</strong>: It also injects payloads to try to exploit found vulnerabilities.
+                </li>
+                <li>
+                    <strong>Full and very deep ultimate</strong>: It also shows HTTP requests.
+                </li>
+            </ul>
+        </li>
+        <br>
+        <li>
+            <strong>Email notification: </strong> Here we can check if we want to receive an email when the task is finished.
+        </li>
+        <br>
+        <li>
+            <strong>Finish: </strong> Finally we can choose if we just want to save the task, or execute it after saving.
+        </li>
+    </ul>
+
+{% endblock content %}

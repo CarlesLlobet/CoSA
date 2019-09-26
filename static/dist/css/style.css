@@ -1,0 +1,51 @@
+body
+{
+	line-height: 1.6em;
+}
+.found
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	text-align: center;
+	color: red;
+}
+.noFound
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	text-align: center;
+	color: orangered;
+}
+.fail
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	text-align: center;
+	color: green;
+}
+#myStyle
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 45px;
+	width: 75%;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #0865c2;
+}
+#myStyle th
+{
+	padding: 20px;
+	font-weight: normal;
+	font-size: 13px;
+	color: #039;
+	text-transform: uppercase;
+	text-align: center;
+	border-right: 1px solid #0865c2;
+	border-top: 1px solid #0865c2;
+	border-left: 1px solid #0865c2;
+	border-bottom: 1px solid #0865c2;
+}
+#myStyle td
+{
+	padding: 10px 20px;
+	color: #669;
+	border-right: 1px dashed #6cf;
+}

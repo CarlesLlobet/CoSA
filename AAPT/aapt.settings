@@ -1,0 +1,12 @@
+{
+	"allowed_domains":["*"],
+
+	"db_name":"db2apt",
+	"db_host":"127.0.0.1",
+	"db_port":"5432",
+	"db_uesername":"2apt",
+	"db_password":"4pplus4ut0m4t3dP3nt3st1ngT00lk1t",
+
+	"openvas_username":"2apt",
+	"openvas_password":"4pplus4ut0m4t3dP3nt3st1ngT00lk1t"
+}

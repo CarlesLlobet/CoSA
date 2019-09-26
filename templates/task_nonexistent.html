@@ -1,0 +1,27 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+    <br><br>
+    <div class="col-md-12">
+        <center>
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    This task does not exist
+                </div>
+                <div class="panel-body">
+                    <p>The task you are looking for does not exist. It might be a Blocked task pending to be deleted and now it has already been deleted, or that the task ID in the URL is wrong.
+                        Go back to the Dashboard to see the existing tasks.</p>
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-default"
+                            onclick="window.location.href='/'">
+                        My tasks
+                    </button>
+                </div>
+            </div>
+        </center>
+    </div>
+{% endblock content %}
