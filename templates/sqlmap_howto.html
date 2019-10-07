@@ -1,0 +1,117 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">SQLmap
+                    <small>Usage guide</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <!-- Body -->
+    <a href="http://sqlmap.org/" target="_blank"><img src={% static "img/sqlmap.png" %} width=25% alt="SQLmap"
+                                                      border="0"></a>
+    <h2> What is it? </h2>
+    SQLmap is an open source tool to do peneteration tests, automating the detection and exploitment of SQL injection vulnerabilities and Database Servers control.
+    <h2> How to use it? </h2>
+    <center>
+        <img src={% static "Captures/SQLmap_newTask_numbered.PNG" %} alt="SQLmap_tool"
+             style="border:1px solid black;"/>
+    </center>
+    <h3>Name</h3>
+    <p>
+        This field allows us to identify the task<br>
+        It is mandatory to introduce it to be able to differentiate our many tasks, even if they are pointing to the same target, but with different configurations.
+    </p>
+
+    <h3>Target</h3>
+    <p>
+        This field defines the hosts we want to scan over.
+        We have two options, and can choose between them or use both:
+    <ul>
+        <li>
+            <strong>Domain:</strong> Here we are capable of inserting domains so OpenVAS resolves them for us, separated by comma, and with the unique condition that they have to be complete to be able to found the servers.
+        </li>
+        <br>
+        <li>
+            <strong>IPs:</strong> Here we can insert IPs separated by comma of the hosts we want to scan directly. In case we want to add a whole network (e.g: 147.83.1.0/24), you will need a special permission from the administrator.
+        </li>
+    </ul>
+    </p>
+    <h3>Parameters</h3>
+    <ul>
+        <li>
+            <strong>Verbosity:</strong> Defines the verbosity level of our results, the amount of detail in the output. There are 7 levels:
+            <ul>
+                <li>
+                    <strong>0</strong>: Just python error and critical messages.
+                </li>
+                <li>
+                    <strong>1</strong>: Also useful information and alert messages.
+                </li>
+                <li>
+                    <strong>2</strong>: Also debug messages.
+                </li>
+                <li>
+                    <strong>3</strong>: Also injected payloads.
+                </li>
+                <li>
+                    <strong>4</strong>: Also HTTP requests.
+                </li>
+                <li>
+                    <strong>5</strong>: Also HTTP response headers.
+                </li>
+                <li>
+                    <strong>6</strong>: Also the page content in the HTTP responses.
+                </li>
+            </ul>
+        </li>
+        <br>
+        <li>
+            <strong>Level:</strong> Defines the amount of payloads it will try to inject, without being an exact amount. It will also affect to the typology of tests to execute.
+            With level 1 just GET and POST parameters will be tested.Defineix la quantitat de payloads que intentar&agrave; injectar, sense ser el
+            From level 2 also values of HTTP cookies, and from level 3 HTTP headers User-Agent/Refearer.
+        </li>
+        <br>
+        <li>
+            <strong>Risk: </strong> Defines the risk the tool will accept when testing the database. There are three levels:
+            <ul>
+                <li>
+                    <strong>1</strong>: Innocuous to the great majority of injection points.
+                </li>
+                <li>
+                    <strong>2</strong>: It could cause a DDOS to the Database.
+                </li>
+                <li>
+                    <strong>3</strong>: It could even <strong>DELETE</strong> data from the database.
+                </li>
+            </ul>
+        </li>
+        <br>
+        <li>
+            <strong>Depth: </strong> SQLmap also allows crawling a URL, and maybe the domain we are testing has no vulnerability, but one closer does.
+            This parameter allows to define the depth level of search that SQLmap will test,
+            being 1 just the given domain, and 10 even links at 10 clics from the given URL.
+        </li>
+        <br>
+        <li>
+            <strong>Charset: </strong> Charset of the database to analyse. UTF-8 is the default.
+        </li>
+        <br>
+        <li>
+            <strong>Email notification: </strong> Here we can check if we want to receive an email when the task is finished.
+        </li>
+        <br>
+        <li>
+            <strong>Finish: </strong> Finally we can choose if we just want to save the task, or execute it after saving.
+        </li>
+    </ul>
+
+{% endblock content %}

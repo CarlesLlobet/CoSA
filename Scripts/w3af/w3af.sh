@@ -16,14 +16,14 @@ if [[ $# -le 0 ]]; then
     if (( $N < $TASKS )); then
             #Select the oldest request
             # id|target|target_os|target_framework|profile|login_url|login_username|login_password|login_userfield|login_passwordfield|login_method
-            read id target target_os target_framework profile login_url login_username login_password login_userfield login_passwordfield login_method http_domain http_user http_password<<< `curl -k -X GET https://localhost:8080/API/w3af/get_next/|sed 's/\"//g'|tr "|" "\n"`
+            read id target target_os target_framework profile login_url login_username login_password login_userfield login_passwordfield login_method http_domain http_user http_password<<< `curl -k -X GET http://localhost:8080/API/w3af/get_next/|sed 's/\"//g'|tr "|" "\n"`
             if [[ $id ]];then
                 #Log parametres
                 echo "id = " $id ", target = " $target ", target_os = " $target_os ", target_framework = " $target_framework ", profile = " $profile ", login_url = " $login_url ", login_username = " $login_username ", login_password = " $login_password ", login_userfield = " $login_userfield ", login_passwordfield = " $login_passwordfield ", login_method = " $login_method
                 
 		#Crear w3af.run amb la info de la task i posar a Running la task
                 touch $TMP/.running"$N"
-                curl -k -X PUT -d state=Running https://localhost:8080/API/w3af/set_state/$id/
+                curl -k -X PUT -d state=Running http://localhost:8080/API/w3af/set_state/$id/
 
                 # Escriure un nou "$TMP"/execute"$N".w3af per executarlo
                 echo "# -----------------------------------------------------------------------------------------------------------" > "$TMP"/execute"$N".w3af
@@ -100,10 +100,10 @@ if [[ $# -le 0 ]]; then
 
                 while kill -0 $PID
                 do
-                    STATE=`curl -k -X GET https://localhost:8080/API/w3af/get_state/$id/`
+                    STATE=`curl -k -X GET http://localhost:8080/API/w3af/get_state/$id/`
                     if [ $STATE == '"Blocked"' ]; then
                         kill -9 $PID
-                        curl -k  -X GET https://localhost:8080/API/w3af/kill/$id/
+                        curl -k  -X GET http://localhost:8080/API/w3af/kill/$id/
                         rm $TMP/.running"$N"
 			rm "$TMP"/execute"$N".w3af
                         exit
@@ -125,10 +125,10 @@ if [[ $# -le 0 ]]; then
 		#Deleting also all HTTP responses to see better
 		sed -i '/<pre>/,/<\/pre>/d' "$TMP"/w3af"$N".results.html
                 echo -e "$output"
-                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af"$N".results.html;type=text/plain" https://localhost:8080/API/w3af/add_results/$id/
-                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af"$N".results.full;type=text/plain" https://localhost:8080/API/w3af/add_report/$id/
+                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af"$N".results.html;type=text/plain" http://localhost:8080/API/w3af/add_results/$id/
+                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af"$N".results.full;type=text/plain" http://localhost:8080/API/w3af/add_report/$id/
 
-                curl  -k -X PUT -d state=Finalitzada https://localhost:8080/API/w3af/set_state/$id/
+                curl  -k -X PUT -d state=Finalitzada http://localhost:8080/API/w3af/set_state/$id/
 		
 		rm "$TMP"/execute"$N".w3af
 		rm $TMP/w3af"$N".results.html

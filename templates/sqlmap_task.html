@@ -1,0 +1,139 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+    <br><br>
+    {% if results == "fail" %}
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <i class="fa fa-exclamation-circle"></i> <strong>Aquesta encara no té report</strong>
+        </div>
+    {% endif %}
+    {% if task.modify_date and results.finish_date %}
+        {% if task.modify_date > results.finish_date %}
+            <div class="alert alert-warning alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <i class="fa fa-exclamation-circle"></i> <strong>Aquesta tasca es va modificar després de obtenir
+                aquests resultats, pel que la configuració i els resultats poden no concordar.</strong>
+            </div>
+        {% endif %}
+    {% endif %}
+    <div class="panel-heading">
+        <h1><i class="fa fa-database fa-fw"></i> Tasca: {{ task.name }} </h1>
+    </div>
+    <div class="col-md-5">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Informació de la tasca
+                </div>
+                <div class="panel-body">
+                    {% if user.is_staff %}
+                        <p>
+                            <strong>Usuari: </strong> {{ task.user }}
+                        </p>
+                    {% endif %}
+                    <p>
+                        <strong>Estat: </strong> {{ task.estat }}
+                        {% if task.estat != "Esperant" %}
+                            <div class="progress progress-striped">
+                                <div {% if task.estat == "Finalitzada" %}
+                                    class="progress-bar progress-bar-success" aria-valuenow="100"
+                                    style="width: 100%"
+                                {% elif task.estat == "Executant" %}
+                                    class="progress-bar progress-bar-info active"
+                                    aria-valuenow="70" style="width: 70%"
+                                {% elif task.estat == "Bloquejada" %}
+                                    class="progress-bar progress-bar-danger active" aria-valuenow="30"
+                                    style="width: 30%"{% endif %}
+                                    role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="sr-only">Task info</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </p>
+                    <p>
+                        <strong>Target: </strong> {{ task.target }}
+                    </p>
+                    <p>
+                        <strong>Verbosity: </strong> {{ task.verbosity }}
+                    </p>
+                    <p>
+                        <strong>Level: </strong> {{ task.level }}
+                    </p>
+                    <p>
+                        <strong>Risk: </strong> {{ task.risk }}
+                    </p>
+                    <p>
+                        <strong>Depth: </strong> {{ task.depth }}
+                    </p>
+                    <p>
+                        <strong>Charset: </strong> {{ task.charset }}
+                    </p>
+                    <p>
+                        <strong>Data d'inserció: </strong> {{ task.insert_date }}
+                    </p>
+                    {% if task.modify_date %}
+                        <p>
+                            <strong>Última modificació: </strong> {{ task.modify_date }}
+                        </p>
+                    {% endif %}
+                    <p>
+                        <strong>Correu: </strong> {% if task.mail %}
+                        <td>Sí ({{ task.mail }})</td>{% else %}
+                        <td>No</td>{% endif %}
+                    </p>
+                    {% if task.periodicity %}
+                        <p>
+                            <strong>Periodicitat: </strong> {{ task.periodicity }}
+                        </p>
+                        <p>
+                            <strong>Propera execució: </strong>
+                            {{ task.next_execution }}
+                        </p>
+                    {% else %}
+                        <p>
+                            <strong>Periodicitat: </strong> No
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7 align-center">
+        <button type="submit"
+                class="btn btn-primary {% if task.estat != "Finalitzada" and task.estat != "Planificada" %}disabled" disabled="disabled{% endif %}"
+                onclick="window.location.href='{% url 'sqlmap_relaunch' task.id %}'">
+            Encuar de nou
+        </button>
+        <button type="submit"
+                class="btn btn-default {% if task.estat == "Executant" or task.estat == "Bloquejada" %}disabled" disabled="disabled{% endif %}"
+                onclick="window.location.href='{% url 'sqlmap_modify' task.id %}'">
+            Modificar
+        </button>
+        <button type="submit"
+                class="btn btn-danger {% if task.estat == "Bloquejada" %}disabled" disabled="disabled{% endif %}"
+                onclick="window.location.href='{% url 'sqlmap_delete' task.id %}'">
+            Eliminar
+        </button>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                Resultats ({{ results.finish_date }})
+                <button type="submit"
+                        class="btn btn-primary pull-right {% if not results.report %}disabled" disabled="disabled{% endif %}"
+                        onclick="window.location.href='{% url 'sqlmap_download' task.id %}'">Descarregar Report Complet
+                </button>
+            </div>
+            <div class="panel-body">
+                <pre style="font-family: 'Lucida Console', Monaco, monospace">
+                    <!-- Si es canvia "sortida" per "report" es veura el txt -->
+                    {{ results.report|safe }}
+                </pre>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -6,7 +8,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from xml.etree import ElementTree
 import base64
-from datetime import datetime
+from django.utils import timezone
 
 from Core.views import crearContextBase
 from rest_framework.response import Response
@@ -81,10 +83,12 @@ def openvas_download(request, id):
         # Retornant pdf
         report = scanner.get_report_pdf(str(result.report))
         nomArxiu = "Report_" + task.name + "_" + datetime.strftime(result.finish_date, "%Y%m%d%H%M") + ".pdf"
+        #print("Report:" + report)
         reportXML = ElementTree.tostring(report.find("report"), encoding='utf-8', method='xml')
-        fullReport = ElementTree.fromstring(reportXML)
+        print("ReportXML:" + str(reportXML).split(">")[-2].split("<")[0])
+        #fullReport = ElementTree.fromstring(reportXML)
 	    #response = HttpResponse(base64.b64decode(fullReport.find("in_use").tail), content_type='application/pdf')
-        response = HttpResponse(base64.b64decode(reportXML.split(">")[-2]), content_type='application/pdf')
+        response = HttpResponse(base64.b64decode(str(reportXML).split(">")[-2].split("<")[0]), content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename=' + nomArxiu
         return response
     else:
@@ -106,7 +110,7 @@ def openvas_relaunch(request, id):
         res.save()
         task.state = "On Hold"
         task.percentage = 0
-        task.insert_date = datetime.now()
+        task.insert_date = timezone.now()
         task.save()
     return HttpResponseRedirect('/OpenVAS/tasks/')
 
@@ -127,9 +131,6 @@ def openvas_modify(request, id):
                 m = form.cleaned_data['mail']
                 mf = form.cleaned_data['mail_field']
                 c = form.cleaned_data['config']
-                pc = form.cleaned_data['periodicity_checkbox']
-                ed = form.cleaned_data['execute_date']
-                pd = form.cleaned_data['periodicity']
                 if 'save' in request.POST:
                     e = "Saved"
                 elif 'cue' in request.POST:
@@ -154,17 +155,11 @@ def openvas_modify(request, id):
                     task.state = e
                     task.percentage = 0
                     task.config = c
-                    task.modify_date = datetime.now()
+                    task.modify_date = timezone.now()
                     if m:
                         task.mail = mf
                     else:
                         task.mail = None
-                    if pc:
-                        task.periodicity = pd
-                        task.execute_date = ed
-                    else:
-                        task.periodicity = None
-                        task.execute_date = None
                     task.save()
                 else:
                     context.update({"notModify": True})
@@ -189,7 +184,7 @@ def openvas_modify(request, id):
                     ips += "," + t
             form.fields["urls"].initial = urls
             form.fields["ips"].initial = ips
-            if task.mail:
+            if task.mail != "" or task.mail is not None:
                 form.fields["mail_field"].initial = task.mail
                 form.fields["mail"].initial = True
             form.fields["config"].initial = task.config

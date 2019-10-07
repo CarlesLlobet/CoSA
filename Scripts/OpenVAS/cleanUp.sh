@@ -1,10 +1,10 @@
 #!/bin/bash
 
-USER=`cat ../../AAPT/2apt.settings | grep openvas_username | cut -f4 -d\"`
-PASSWD=`cat ../../AAPT/2apt.settings | grep openvas_password | cut -f4 -d\"`
+USER=`cat ../../AAPT/aapt.settings | grep openvas_username | cut -f4 -d\"`
+PASSWD=`cat ../../AAPT/aapt.settings | grep openvas_password | cut -f4 -d\"`
 BINDIR=/usr/bin
 
-DELETED=`curl -k -X GET https://localhost:8080/API/OpenVAS/get_deleted/`
+DELETED=`curl -k -X GET http://localhost:8080/API/OpenVAS/get_deleted/`
 echo "Django raw tasks: "$DELETED
 
 DELETED=($DELETED)
@@ -25,7 +25,7 @@ do
         echo "Deleting task and calling a kill for the task"
         REMOVE_TASK=`$BINDIR/omp --pretty-print -u "$USER" -w "$PASSWD" --xml=" <delete_task task_id=\"$ID_TASK\"/>"`
         if [[ $REMOVE_TASK ]]; then
-            curl -k -X GET https://localhost:8080/API/OpenVAS/kill/$d/
+            curl -k -X GET http://localhost:8080/API/OpenVAS/kill/$d/
         else
             echo "Unable to delete task from OpenVAS"
         fi

@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -39,7 +39,7 @@ class openvas_requests(models.Model):
     mail = models.CharField(max_length=100, null=True)
 
     #Saving inserting date
-    insert_date = models.DateTimeField('date created', default=datetime.now)
+    insert_date = models.DateTimeField('date created', default=timezone.now)
 
     # Saving modify date
     modify_date = models.DateTimeField('date modified', null=True)

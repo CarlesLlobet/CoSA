@@ -1,0 +1,303 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+<!-- Scripts i css del slider (no van)
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+-->
+{% block content %}
+    {% if notModify == True %}
+        <br><br>
+        <div class="col-md-12">
+            <center>
+                <div class="panel panel-red">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Task can not be modified</h1>
+                    </div>
+                    <div class="panel-body">
+                        {% if task.state == "Running" %}
+                            <p>This task can not be modified because it is already Running. You can delete it and
+                                SQLmap will stop, and create a new one with the parameters modified.</p>
+                        {% elif task.state == "Blocked" %}
+                            <p>This task can not be modified because it is Blocked. You will have to wait the system to
+                                properly stop SQLmap (1 minute top) and create a new one with the desired
+                                parameters.</p>
+                        {% endif %}
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-default"
+                                onclick="window.location.href='/OpenVAS/tasks'">
+                            SQLmap Tasks
+                        </button>
+                        {% if task.state != "Blocked" %}
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="window.location.href='{% url 'openvas_delete' task.id %}'">
+                                Delete
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </center>
+        </div>
+    {% else %}
+
+        <!-- Nice Page-Advisor not able to close in grey-->
+        <!--
+        <div class="row">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <i class="fa fa-question-circle"></i> Saps com utilitzar SQLmap? Més informació <a href="/SQLmap/how_to">aquí</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">SQLmap<small>New Task</small></h1>
+                </div>
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i> <strong>Do you know how to use SQLmap?</strong> More information <a
+                        href="/SQLmap/how_to" class="alert-link">here</a>
+                    about its usage.
+                </div>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert"
+                                    aria-hidden="true">&times;</button>
+                            <i class="fa fa-exclamation-circle"></i> <strong>{{ error }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div data-role="main" class="ui-content">
+            <form method="post" action="#"> <!-- Substituir # per script a executar quan es cliqui submit-->
+                <div class="row container-fluid center-block">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <h3>Nom</h3>
+                        <br>
+                        <div class="row container-fluid">
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <span class="error" style="color:red">
+                            {% for error in form.name.errors %}{{ error }}{% endfor %}
+                        </span>
+                            {% endif %}
+                            <br><br>
+                        </div>
+                        <!-- TODO: Fer que si hi ha error a Connexio directa, refresqui a aquella tab directament -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3>Target</h3>
+                            </div>
+                            <div class="panel-body">
+
+
+                                <ul class="nav nav-pills" id="myTab">
+                                    <li class="active"><a href="#url" data-toggle="tab">URL</a>
+                                        <!-- aria-expanded="true" -->
+                                    </li>
+                                    <li class=""><a href="#dbms" data-toggle="tab">Connexió
+                                        directa</a> <!-- aria-expanded="false" -->
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane fade in active" id="url">
+                                        <br>
+                                        {{ form.url }}
+                                        {% if form.url.errors %}
+                                            <span class="error" style="color:red">
+                                    {% for error in form.url.errors %}{{ error }}{% endfor %}
+                                    </span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="tab-pane fade" id="dbms">
+                                        <br>
+                                        <label>DBMS:</label>
+                                        {{ form.dbms }} <br>
+                                        {% if form.dbms.errors %}
+                                            <span class="error" style="color:red">
+                                    {% for error in form.dbms.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                        {% endif %}
+                                        <label>User:</label>
+                                        {{ form.user }}
+                                        {% if form.user.errors %}
+                                            <span class="error" style="color:red">
+                                    {% for error in form.user.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                        {% endif %}
+                                        <label>Password:</label>
+                                        {{ form.password }}
+                                        {% if form.password.errors %}
+                                            <span class="error" style="color:red">
+                                    {% for error in form.password.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                        {% endif %}
+                                        <label>Database IP:</label>
+                                        {{ form.ip }}
+                                        {% if form.ip.errors %}
+                                            <span class="error" style="color:red">
+                                    {% for error in form.ip.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                        {% endif %}
+                                        <label>Database Port:</label>
+                                        {{ form.port }}
+                                        {% if form.port.errors %}
+                                            <span class="error" style="color:red">
+                                    {% for error in form.port.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                        {% endif %}
+                                        <label>Database Name:</label>
+                                        {{ form.db_name }}
+                                        {% if form.db_name.errors %}
+                                            <span class="error" style="color:red">
+                                    {% for error in form.db_name.errors %}{{ error }}{% endfor %}
+                                    </span> <br>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h3>Paràmetres</h3>
+                        <br>
+                        <div class="row container-fluid center-block">
+                            <div class="col-md-4">
+                                <div class="rangeslider">
+                                    <label for="verbosity">Verbosity:</label><br>
+                                    <input id="verbosity" name="verbosity" data-slider-id='verbositySlider' type="text"
+                                           data-slider-min="0" data-slider-max="6" data-slider-step="1"
+                                            {% if initial == 1 %}
+                                           value="{{ verbosity }}" data-slider-value="{{ verbosity }}"
+                                            {% else %}
+                                           value="1" data-slider-value="1"
+                                            {% endif %}/>
+                                    <br><br>
+                                </div>
+                                <!--<input type="range" name="verbosity" id="verbosity" value="1" min="0" max="6">-->
+                            </div>
+                            <div class="col-md-4">
+                                <div data-role="rangeslider">
+                                    <label for="level">Level:</label><br>
+                                    <input id="level" name="level" data-slider-id='levelSlider' type="text"
+                                           data-slider-min="1" data-slider-max="5" data-slider-step="1"
+                                            {% if initial == 1 %}
+                                           value="{{ level }}" data-slider-value="{{ level }}"
+                                            {% else %}
+                                           value="1" data-slider-value="1"
+                                            {% endif %}/>
+                                </div>
+                                <br><br>
+                            </div>
+                        </div>
+                        <!-- TODO: Ficar el text d'avis -->
+                        <div class="row container-fluid center-block">
+                            <div class="col-md-4">
+                                <div data-role="rangeslider">
+                                    <label for="risk">Risk:</label><br>
+                                    <input id="risk" name="risk" data-slider-id='riskSlider' type="text"
+                                           data-slider-min="1"
+                                           data-slider-max="3" data-slider-step="1" {% if initial == 1 %}
+                                           value="{{ risk }}" data-slider-value="{{ risk }}"{% else %} value="1"
+                                           data-slider-value="1"{% endif %}/>
+                                    <br><br>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div data-role="rangeslider">
+                                    <label for="depth">Depth:</label><br>
+                                    <input id="depth" name="depth" data-slider-id='depthSlider' type="text"
+                                           data-slider-min="0"
+                                           data-slider-max="10" data-slider-step="1" {% if initial == 1 %}
+                                           data-slider-value="{{ depth }}" value="{{ depth }}" {% else %} value="1"
+                                           data-slider-value="1" {% endif %}/>
+                                </div>
+                                <br><br>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label>Charset:</label>
+                            {{ form.charset }} <br>
+                            {% if form.charset.errors %}
+                                <span class="error" style="color:red">
+                            {% for error in form.charset.errors %}{{ error }}{% endfor %}
+                        </span><br>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <center>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="periodicity_checkbox" id="periodicity_checkbox"
+                                           checked="true">Programar
+                                    execució periòdica
+                                </label>
+                            </div>
+                            <div id="periodicitat_menu" style="display: none">
+                                <label>Data d'inici:</label>
+                                {{ form.execute_date }}<br>
+                                <label>Periodicitat:</label>
+                                {{ form.periodicity }}
+                                <br>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="mail" id="mail" checked="true">Enviar resultats per
+                                    correu al
+                                    finalitzar
+                                </label>
+                            </div>
+                            <div class="form-group input-group col-md-3" id="mail_field" style="display: none">
+                                <span class="input-group-addon">@</span>
+                                {{ form.mail_field }}
+                            </div>
+                            {% if form.mail_field.errors %}
+                                <span class="error" style="color:red">
+                            {% for error in form.mail_field.errors %}{{ error }}{% endfor %}
+                        </span>
+                            {% endif %}
+                            <br><br><br>
+                            <button type="submit" class="btn btn-primary" name="save">Guardar tasca</button>
+                            <button type="submit" class="btn btn-primary" name="cue">Guardar y encuar tasca</button>
+                            <br><br><br>
+                        </center>
+                    </div>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+    <script>
+
+        $(document).ready(function () {
+            if (window.location.hash) {
+                var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+                if (hash == "url") {
+                    $("#myTab li:eq(1) a").tab('show');
+                }
+                if (hash == "dbms") {
+                    $("#myTab li:eq(2) a").tab('show');
+                }
+            }
+
+
+        });
+    </script>
+{% endblock content %}

@@ -16,7 +16,7 @@ if [[ $# -le 0 ]]; then
 	#Test if there's a sqlmap task running already 
 	if (( $N < $TASKS )); then
 		#Do a SELECT of the oldest request
-		read -d "\n" id type target verbosity level risk depth charset <<< `curl -k -X GET https://localhost:8080/API/SQLmap/get_next/|sed 's/\"//g'|tr "|" "\n"`
+		read -d "\n" id type target verbosity level risk depth charset <<< `curl -k -X GET http://localhost:8080/API/SQLmap/get_next/|sed 's/\"//g'|tr "|" "\n"`
 
 		if [[ $id ]]
 		then
@@ -30,7 +30,7 @@ if [[ $# -le 0 ]]; then
 
 			#Create sqlmap.run with the task info and put task to Running state
 			touch $TMP/.running"$N"
-			curl -k -X PUT -d state=Running https://localhost:8080/API/SQLmap/set_state/$id/
+			curl -k -X PUT -d state=Running http://localhost:8080/API/SQLmap/set_state/$id/
 
 			#Call SQLmap with the params
 			$PYTHON $SQLMAP $type "$target" -v $verbosity --level=$level --risk=$risk --crawl=$depth --charset=$charset -a --batch --eta > "$TMP"/sqlmap.results"$N" 2>&1 &
@@ -38,10 +38,10 @@ if [[ $# -le 0 ]]; then
 
             while kill -0 $PID
             do
-                STATE=`curl -k -X GET https://localhost:8080/API/SQLmap/get_estat/$id/`
+                STATE=`curl -k -X GET http://localhost:8080/API/SQLmap/get_estat/$id/`
 			    if [ $STATE == '"Blocked"' ]; then
                     kill -9 $PID
-                    curl -k -X GET https://localhost:8080/API/SQLmap/kill/$id/
+                    curl -k -X GET http://localhost:8080/API/SQLmap/kill/$id/
                     rm $TMP/.running"$N"
                     exit
                 fi
@@ -54,10 +54,10 @@ if [[ $# -le 0 ]]; then
 			rm $TMP/.running"$N"
 			output=`cat "$TMP"/sqlmap.results"$N"`
 			echo -e "$output"
-			curl -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/sqlmap.results"$N".html;type=text/plain" https://localhost:8080/API/SQLmap/add_results/$id/
-			curl -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/sqlmap.results"$N";type=text/plain" https://localhost:8080/API/SQLmap/add_report/$id/
+			curl -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/sqlmap.results"$N".html;type=text/plain" http://localhost:8080/API/SQLmap/add_results/$id/
+			curl -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/sqlmap.results"$N";type=text/plain" http://localhost:8080/API/SQLmap/add_report/$id/
 
-			curl -k -X PUT -d state=Finished https://localhost:8080/API/SQLmap/set_state/$id/
+			curl -k -X PUT -d state=Finished http://localhost:8080/API/SQLmap/set_state/$id/
 
 			# COMMENTED TO SAVE THE PSQL COMMAND, BECAUSE THE RESULT GOES BY API: output=$(<sqlmap.results)
 			#psql -h ip -d DATABASE -U DBUSER -p PORT -tAc 'UPDATE "SQLmap_sqlmap_results" SET output='$output' WHERE id='$id''

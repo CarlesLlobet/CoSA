@@ -35,6 +35,24 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 # Application definition
 
@@ -47,7 +65,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Core.apps.CoreConfig',
     'API.apps.APIConfig',
-    'OpenVAS.apps.OpenVASConfig'
+    'OpenVAS.apps.OpenVASConfig',
+    #'SQLmap.apps.SqlmapConfig',
+    #'w3af.apps.w3afConfig'
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,94 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+{% block content %}
+
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">w3af
+                    <small>Usage guide</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <a href="http://w3af.org/" target="_blank"><img src={% static "img/w3af.png" %} width=25% alt="w3af"
+                                                    border="0"></a>
+    <h2> What is it? </h2>
+    <p>
+        w3af is a Web Applications vulnerability scanner.<br>
+        The objective of this project is to help web applications to be safer and secure searching and exploiting vulnerabilities through the web application.
+    </p>
+    <h2> How to use it? </h2>
+    <center>
+        <img src={% static "Captures/w3af_newTask_numbered.PNG" %} alt="w3af_tool"
+             style="border:1px solid black;"/>
+    </center>
+    <h3>Name</h3>
+    <p>
+        This field allows us to identify the task<br>
+        It is mandatory to introduce it to be able to differentiate our many tasks, even if they are pointing to the same target, but with different configurations.
+    </p>
+    <h3>Target</h3>
+    <p>
+        This field defines the hosts we want to scan over.
+        We have two options, and can choose between them or use both:
+    <ul>
+        <li>
+            <strong>Domain:</strong> Here we are capable of inserting domains so OpenVAS resolves them for us, separated by comma, and with the unique condition that they have to be complete to be able to found the servers.
+        </li>
+        <br>
+        <li>
+            <strong>IPs:</strong> Here we can insert IPs separated by comma of the hosts we want to scan directly. In case we want to add a whole network (e.g: 147.83.1.0/24), you will need a special permission from the administrator.
+        </li>
+    </ul>
+    </p>
+    <h3>Authentication</h3>
+    This parameters are optionals, as OS and Framework are, and they have to be used just if we know them, to help w3af to obtain more accurate results during the scan:
+    <ul>
+        <li>
+            <strong>Login URL:</strong> The URL that the Web Application uses to authenticate their users.
+        </li>
+        <li>
+            <strong>User:</strong> Indicates a valid username to authenticate to the scanned platform.
+        </li>
+        <li>
+            <strong>User field:</strong> Indicates the HTML id of the field where the username is meant to be written, to help w3af to find it.
+        </li>
+        <li>
+            <strong>Contrasenya:</strong> Indicates a valid password for the given user to authenticate to the scanned platform.
+        </li>
+        <li>
+            <strong>Password field:</strong> Indicates the id of the field where the password is meant to be written, to help w3af to find it.
+        </li>
+        <li>
+            <strong>Access method:</strong> Indicates if the authentication is being realized through a GET or POST request. By default, most web applications use POST, as its much safer.
+        </li>
+        <br>
+        <li>
+            <strong>Profile:</strong> Allows to select one of the Applus+ customized profiles to audit the application:
+        <li>
+            <strong>Fast Scan:</strong> Is the simplest and quickest method provided by Applus+. Allows quick reviews.
+        </li>
+        <li>
+            <strong>Full Scan:</strong> Is the most complete scan and the one that checks more things, even lots of the things being checked will not be in a solely platform.
+        </li>
+        <li>
+            <strong>OWASP Scan:</strong> Is the recommended scan method, because even its not as complete as the previous, it checks for the most important vulnerabilities web applications use to have.
+        </li>
+        </li>
+        <br>
+        <li>
+            <strong>Email notification: </strong> Here we can check if we want to receive an email when the task is finished.
+        </li>
+        <br>
+        <li>
+            <strong>Finish: </strong> Finally we can choose if we just want to save the task, or execute it after saving.
+        </li>
+    </ul>
+
+{% endblock content %}

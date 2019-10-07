@@ -1,0 +1,296 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+
+<!-- Scripts i css del slider (no van)
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+-->
+{% block content %}
+    {% if notModify == True %}
+        <br><br>
+        <div class="col-md-12">
+            <center>
+                <div class="panel panel-red">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Task can not be modified</h1>
+                    </div>
+                    <div class="panel-body">
+                        {% if task.state == "Running" %}
+                            <p>This task can not be modified because it is already Running. You can delete it and
+                                w3af will stop, and create a new one with the parameters modified.</p>
+                        {% elif task.state == "Blocked" %}
+                            <p>This task can not be modified because it is Blocked. You will have to wait the system to
+                                properly stop w3af (1 minute top) and create a new one with the desired
+                                parameters.</p>
+                        {% endif %}
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-default"
+                                onclick="window.location.href='/OpenVAS/tasks'">
+                            w3af Tasks
+                        </button>
+                        {% if task.state != "Blocked" %}
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="window.location.href='{% url 'openvas_delete' task.id %}'">
+                                Delete
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </center>
+        </div>
+    {% else %}
+
+        <!-- Nice Page-Advisor not able to close in grey-->
+        <!--
+        <div class="row">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <i class="fa fa-question-circle"></i> Saps com utilitzar SQLmap? Més informació <a href="/SQLmap/how_to">aquí</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="page-header">
+                    w3af
+                    <small>Nova tasca</small>
+                </h1>
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i> <strong>Saps com utilitzar w3af?</strong> Més informació <a
+                        href="/w3af/how_to" class="alert-link">aquí</a> sobre el seu funcionament
+                </div>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert"
+                                    aria-hidden="true">&times;</button>
+                            <i class="fa fa-exclamation-circle"></i> <strong>{{ error }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div data-role="main" class="ui-content">
+            <form method="post" action="#"> <!-- Substituir # per script a executar quan es cliqui submit-->
+                <div class="row container-fluid center-block">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <h3>Nom</h3>
+                        <br>
+                        <div class="row container-fluid">
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <span class="error" style="color:red">
+                            {% for error in form.name.errors %}{{ error }}{% endfor %}
+                            </span>
+                            {% endif %}
+                            <br><br>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3>Target</h3>
+                            </div>
+                            <div class="panel-body">
+                                <label>URL:</label>
+                                {{ form.target }}
+                                {% if form.target.errors %}
+                                    <span class="error" style="color:red">
+                                        {% for error in form.target.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                {% endif %}
+                                <br>
+                                <label>OS:</label>
+                                {{ form.target_os }} <br>
+                                {% if form.target_os.errors %}
+                                    <span class="error" style="color:red">
+                                        {% for error in form.target_os.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                {% endif %}
+                                <br>
+                                <label>Framework:</label>
+                                {{ form.target_framework }} <br>
+                                {% if form.target_framework.errors %}
+                                    <span class="error" style="color:red">
+                                        {% for error in form.target_framework.errors %}{{ error }}{% endfor %}
+                                    </span><br>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h3>Autenticació</h3>
+                        <br>
+                        <div class="row container-fluid center-block">
+                            <div class="col-md-12">
+                                <label>Login URL:</label>
+                                {{ form.login_url }} <br>
+                                {% if form.login_url.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.login_url.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label>Usuari:</label>
+                                {{ form.login_username }} <br>
+                                {% if form.login_username.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.login_username.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                                <label>Contrasenya:</label>
+                                {{ form.login_password }} <br>
+                                {% if form.login_password.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.login_password.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label>Camp d'usuari:</label>
+                                {{ form.login_userfield }} <br>
+                                {% if form.login_userfield.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.login_userfield.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                                <label>Camp de contrasenya:</label>
+                                {{ form.login_passwordfield }} <br>
+                                {% if form.login_passwordfield.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.login_passwordfield.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                        <h3>Autenticació HTTP Bàsica</h3>
+                        <br>
+                        <div class="row container-fluid center-block">
+                            <div class="col-md-12">
+                                <label>Domini:</label>
+                                {{ form.http_domain }} <br>
+                                {% if form.http_domain.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.http_domain.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label>Usuari:</label>
+                                {{ form.http_user }} <br>
+                                {% if form.http_user.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.http_user.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                                <label>Contrasenya:</label>
+                                {{ form.http_password }} <br>
+                                {% if form.http_password.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.http_password.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label>Camp d'usuari:</label>
+                                {{ form.login_userfield }} <br>
+                                {% if form.login_userfield.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.login_userfield.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                                <label>Camp de contrasenya:</label>
+                                {{ form.login_passwordfield }} <br>
+                                {% if form.login_passwordfield.errors %}
+                                    <span class="error" style="color:red">
+                                    {% for error in form.login_passwordfield.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                                {% endif %}
+                            </div>
+                            <label>Mètode d'accès:</label>
+                            {{ form.login_method }} <br>
+                            {% if form.login_method.errors %}
+                                <span class="error" style="color:red">
+                                    {% for error in form.login_method.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <center>
+                            <label>Perfil:</label>
+                            {{ form.profile }} <br>
+                            {% if form.profile.errors %}
+                                <span class="error" style="color:red">
+                                    {% for error in form.profile.errors %}{{ error }}{% endfor %}
+                                </span><br>
+                            {% endif %}
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="periodicity_checkbox" id="periodicity_checkbox"
+                                           checked="true">Programar
+                                    execució periòdica
+                                </label>
+                            </div>
+                            <div id="periodicitat_menu" style="display: none">
+                                <label>Data d'inici:</label>
+                                {{ form.execute_date }}<br>
+                                <label>Periodicitat:</label>
+                                {{ form.periodicity }}
+                                <br>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="mail" id="mail" checked="true">Enviar resultats per
+                                    correu al
+                                    finalitzar
+                                </label>
+                            </div>
+                            <div class="form-group input-group col-md-3" id="mail_field" style="display: none">
+                                <span class="input-group-addon">@</span>
+                                {{ form.mail_field }}
+                            </div>
+                            {% if form.mail_field.errors %}
+                                <span class="error" style="color:red">
+                            {% for error in form.mail_field.errors %}{{ error }}{% endfor %}
+                        </span>
+                            {% endif %}
+                            <br><br><br>
+                            <button type="submit" class="btn btn-primary" name="save">Guardar tasca</button>
+                            <button type="submit" class="btn btn-primary" name="cue">Guardar y encuar tasca</button>
+                            <br><br><br>
+                        </center>
+                    </div>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+    <script>
+
+        $(document).ready(function () {
+            if (window.location.hash) {
+                var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+                if (hash == "url") {
+                    $("#myTab li:eq(1) a").tab('show');
+                }
+                if (hash == "dbms") {
+                    $("#myTab li:eq(2) a").tab('show');
+                }
+            }
+
+
+        });
+    </script>
+{% endblock content %}

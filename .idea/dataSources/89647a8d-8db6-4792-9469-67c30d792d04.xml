@@ -39,42 +39,42 @@
       <DataType>varchar(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="22" parent="6" name="state">
+    <column id="22" parent="6" name="config">
       <Position>3</Position>
-      <DataType>varchar(20)|0s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="23" parent="6" name="config">
-      <Position>4</Position>
       <DataType>varchar(30)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="24" parent="6" name="percentage">
-      <Position>5</Position>
+    <column id="23" parent="6" name="percentage">
+      <Position>4</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="25" parent="6" name="target">
+    <column id="24" parent="6" name="target">
+      <Position>5</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="25" parent="6" name="mail">
       <Position>6</Position>
       <DataType>varchar(100)|0s</DataType>
+    </column>
+    <column id="26" parent="6" name="insert_date">
+      <Position>7</Position>
+      <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="26" parent="6" name="mail">
-      <Position>7</Position>
-      <DataType>varchar(100)|0s</DataType>
-    </column>
-    <column id="27" parent="6" name="insert_date">
+    <column id="27" parent="6" name="modify_date">
       <Position>8</Position>
       <DataType>datetime|0s</DataType>
+    </column>
+    <column id="28" parent="6" name="user_id">
+      <Position>9</Position>
+      <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="28" parent="6" name="modify_date">
-      <Position>9</Position>
-      <DataType>datetime|0s</DataType>
-    </column>
-    <column id="29" parent="6" name="user_id">
+    <column id="29" parent="6" name="state">
       <Position>10</Position>
-      <DataType>integer|0s</DataType>
+      <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <index id="30" parent="6" name="OpenVAS_openvas_requests_user_id_8b530664">

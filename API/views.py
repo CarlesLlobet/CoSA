@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import base64
+from datetime import datetime
 
 import logging
 from django.contrib.auth.models import User
@@ -9,7 +10,7 @@ from rest_framework import views
 from rest_framework.decorators import api_view
 from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.response import Response
-from datetime import datetime
+from django.utils import timezone
 from openvas_lib import VulnscanManager, VulnscanException
 from xml.etree import ElementTree
 from mailer import Mailer, Message
@@ -82,7 +83,7 @@ class OpenVAS_setState(views.APIView):
                 print("Username: " + username)
                 body = u'Task ' + unicode(
                     task.name) + u' has finished. The scan found the following vulnerabilities:\n' + unicode(
-                    parsed) + u'\nAttached you will find the complete report.\n For more information: https://localhost:8000/OpenVAS/task/' + unicode(
+                    parsed) + u'\nAttached you will find the complete report.\n For more information: http://localhost:8000/OpenVAS/task/' + unicode(
                     task.id) + u'/'
                 message = Message(From="2apt@applus.com",
                                   To=[task.mail],
@@ -160,7 +161,6 @@ class OpenVAS_setPercentage(views.APIView):
         task.save()
         return Response(status=204)
 
-'''
 class SQLmap_addResult(views.APIView):
     parser_classes = (FormParser, MultiPartParser,)
 
@@ -194,7 +194,7 @@ class SQLmap_setState(views.APIView):
         task.save()
         if e == "Finished":
             res = sqlmap_results.objects.get(id=id)
-            res.finish_date = datetime.now()
+            res.finish_date = timezone.now()
             res.save()
             if task.mail:
                 username = User.objects.get(id=task.user.id).username
@@ -203,7 +203,7 @@ class SQLmap_setState(views.APIView):
                                   To=[task.mail],
                                   Subject=u'[AAPT] SQLmap Report')
                 message.Body = u'Task ' + unicode(
-                    task.name) + u' already finished. To see the results:\n https://localhost:8080/SQLmap/task/' + unicode(
+                    task.name) + u' already finished. To see the results:\n http://localhost:8080/SQLmap/task/' + unicode(
                     task.id) + u'/'
                 sender = Mailer('localhost')
                 sender.send(message)
@@ -274,7 +274,7 @@ class w3af_setState(views.APIView):
         task.save()
         if e == "Finished":
             res = w3af_results.objects.get(id=id)
-            res.finish_date = datetime.now()
+            res.finish_date = timezone.now()
             res.save()
             if task.mail:
                 username = User.objects.get(id=task.user.id).username
@@ -283,7 +283,7 @@ class w3af_setState(views.APIView):
                                   To=[task.mail],
                                   Subject=u'[AAPT] w3af Report')
                 message.Body = u'Task ' + unicode(
-                    task.name) + u' has finished. To see the results:\n https://localhost:8080/w3af/task/' + unicode(
+                    task.name) + u' has finished. To see the results:\n http://localhost:8080/w3af/task/' + unicode(
                     task.id) + u'/'
                 sender = Mailer('localhost')
                 sender.send(message)
@@ -333,5 +333,4 @@ def w3af_getNext(request, format=None):
                 next.id) + "|" + next.target + "|" + next.target_os + "|" + next.target_framework + "|" + next.profile + "|" + next.login_url + "|" + next.login_username + "|" + next.login_password + "|" + next.login_userfield + "|" + next.login_passwordfield + "|" + next.login_method + "|" + next.http_domain + "|" + next.http_user + "|" + next.http_password
             return Response(task, status=200)
         else:
-            return Response(status=404) 
-'''
+            return Response(status=404)

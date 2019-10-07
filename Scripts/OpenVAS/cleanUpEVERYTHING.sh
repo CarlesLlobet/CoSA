@@ -1,7 +1,7 @@
 #!/bin/bash
 
-USER=`cat ../../AAPT/2apt.settings | grep openvas_username | cut -f4 -d\"`
-PASSWD=`cat ../../AAPT/2apt.settings | grep openvas_password | cut -f4 -d\"`
+USER=`cat ../../AAPT/aapt.settings | grep openvas_username | cut -f4 -d\"`
+PASSWD=`cat ../../AAPT/aapt.settings | grep openvas_password | cut -f4 -d\"`
 BINDIR=/usr/bin
 
 #Pillar totes les tasks de OMP

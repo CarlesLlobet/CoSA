@@ -27,5 +27,7 @@ urlpatterns = [
     url(r'^', include('Core.urls')),
     url(r'^API/', include('API.urls')),
     url(r'^OpenVAS/', include('OpenVAS.urls')),
+    #url(r'^SQLmap/', include('w3af.urls')),
+    #url(r'^w3af/', include('SQLmap.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

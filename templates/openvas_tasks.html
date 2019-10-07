@@ -1,6 +1,8 @@
 {% extends "skeleton.html" %}
+{% block extra_head_tags %}
+    <meta http-equiv="refresh" content="60">
+{% endblock %}
 {% load staticfiles %}
-
 <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 
 {% block content %}

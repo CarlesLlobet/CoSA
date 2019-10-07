@@ -87,16 +87,6 @@ class OpenVASForm(forms.Form):
                     IPNetwork(i)
                 except:
                         raise ValidationError(_(my_default_errors_IP['invalid']))
-                else:
-                    b = False
-                    for d in valid_domains:
-                        print("Testing if IP is in a valid domain " + d)
-                        if IPNetwork(i).ip in IPNetwork(d):
-                            print("The ip " + i + "is from network" + d)
-                            b = True
-                    if not b:
-                        print("IP is not from any valid domain")
-                        raise ValidationError(_(my_default_errors_IP['domain']))
 
     urls = forms.CharField(widget=forms.TextInput(attrs={"label": 'URLs:', "class": "form-control",
                     "placeholder": 'Example format: client.com,subdomain.client.com[, ...]'}),
