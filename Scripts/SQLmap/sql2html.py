@@ -14,7 +14,6 @@ cannot_find_usable_links = False
 cannot_connect = False
 #Read STDOUT file line by line
 execution_traces = []
-i = 0
 for line in file_handle_read:
     if (line.strip().startswith("[")) and (line.find("[*]") == -1):
         #Check for special message indicating audit global status
@@ -30,13 +29,14 @@ for line in file_handle_read:
             pass
     else:
         # No te tags de data ni etiqueta al principi
+        # Report generation
+        line_part = line.strip().split(" ")
         execution_trace = ""
         count = 0
         while(count < len(line_part)):
             execution_trace = execution_trace + " " + line_part[count]
             count += 1
-        execution_traces[i] = execution_trace
-        i += 1
+        execution_traces.append(execution_trace)
 
 #Write global audit stauts line
 if(cannot_find_injectable_parameter):

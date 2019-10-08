@@ -55,7 +55,7 @@
                     </li>
                 </ol>
             </div>
-        </div>
+        </div> -->
         <!-- /.row -->
 
         <div class="row">
@@ -87,7 +87,7 @@
                 <div class="row container-fluid center-block">
                     {% csrf_token %}
                     <div class="col-md-4">
-                        <h3>Nom</h3>
+                        <h3>Name</h3>
                         <br>
                         <div class="row container-fluid">
                             {{ form.name }}
@@ -110,8 +110,7 @@
                                     <li class="active"><a href="#url" data-toggle="tab">URL</a>
                                         <!-- aria-expanded="true" -->
                                     </li>
-                                    <li class=""><a href="#dbms" data-toggle="tab">Connexió
-                                        directa</a> <!-- aria-expanded="false" -->
+                                    <li class=""><a href="#dbms" data-toggle="tab">Direct connection</a> <!-- aria-expanded="false" -->
                                     </li>
                                 </ul>
 
@@ -175,7 +174,7 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <h3>Paràmetres</h3>
+                        <h3>Parameters</h3>
                         <br>
                         <div class="row container-fluid center-block">
                             <div class="col-md-4">
@@ -243,26 +242,11 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <center>
+                        <div style="text-align: center;">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="periodicity_checkbox" id="periodicity_checkbox"
-                                           checked="true">Programar
-                                    execució periòdica
-                                </label>
-                            </div>
-                            <div id="periodicitat_menu" style="display: none">
-                                <label>Data d'inici:</label>
-                                {{ form.execute_date }}<br>
-                                <label>Periodicitat:</label>
-                                {{ form.periodicity }}
-                                <br>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="mail" id="mail" checked="true">Enviar resultats per
-                                    correu al
-                                    finalitzar
+                                    <input type="checkbox" name="mail" id="mail" checked="true">Send results by email at
+                                completion.
                                 </label>
                             </div>
                             <div class="form-group input-group col-md-3" id="mail_field" style="display: none">
@@ -275,10 +259,10 @@
                         </span>
                             {% endif %}
                             <br><br><br>
-                            <button type="submit" class="btn btn-primary" name="save">Guardar tasca</button>
-                            <button type="submit" class="btn btn-primary" name="cue">Guardar y encuar tasca</button>
+                            <button type="submit" class="btn btn-primary" name="save">Save task</button>
+                            <button type="submit" class="btn btn-primary" name="cue">Save and execute task</button>
                             <br><br><br>
-                        </center>
+                        </div>
                     </div>
                 </div>
             </form>

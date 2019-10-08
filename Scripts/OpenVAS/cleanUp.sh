@@ -1,7 +1,8 @@
 #!/bin/bash
 
-USER=`cat ../../AAPT/aapt.settings | grep openvas_username | cut -f4 -d\"`
-PASSWD=`cat ../../AAPT/aapt.settings | grep openvas_password | cut -f4 -d\"`
+TMP=`dirname $0`
+USER=`cat $TMP/../../AAPT/aapt.settings | grep openvas_username | cut -f4 -d\"`
+PASSWD=`cat $TMP/../../AAPT/aapt.settings | grep openvas_password | cut -f4 -d\"`
 BINDIR=/usr/bin
 
 DELETED=`curl -k -X GET http://localhost:8080/API/OpenVAS/get_deleted/`

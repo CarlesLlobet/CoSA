@@ -3,6 +3,7 @@ from datetime import datetime
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from netaddr import IPNetwork
 from openvas_lib import VulnscanManager
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -82,7 +83,7 @@ def openvas_download(request, id):
         print(result.report)
         # Retornant pdf
         report = scanner.get_report_pdf(str(result.report))
-        nomArxiu = "Report_" + task.name + "_" + datetime.strftime(result.finish_date, "%Y%m%d%H%M") + ".pdf"
+        nomArxiu = "Report_" + task.name.replace(" ","-") + "_" + datetime.strftime(result.finish_date, "%Y%m%d%H%M") + ".pdf"
         #print("Report:" + report)
         reportXML = ElementTree.tostring(report.find("report"), encoding='utf-8', method='xml')
         print("ReportXML:" + str(reportXML).split(">")[-2].split("<")[0])
@@ -173,12 +174,16 @@ def openvas_modify(request, id):
             tasks = task.target.split(",")
             urls = ""
             ips = ""
-            if full_domain_validator(tasks[0]) == 1:
-                ips += tasks[0]
-            else:
+            try:
+                IPNetwork(tasks[0])
+            except:
                 urls += tasks[0]
+            else:
+                ips += tasks[0]
             for t in tasks[1:]:
-                if full_domain_validator(t) == 1:
+                try:
+                    IPNetwork(t)
+                except:
                     urls += "," + t
                 else:
                     ips += "," + t

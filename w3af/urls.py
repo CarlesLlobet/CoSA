@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.w3af_new, name='w3af_new'),
-    url(r'how_to/$', views.w3af_howto, name='w3af_how_to'),
+    url(r'how_to/$', views.w3af_howto, name='w3af_howto'),
     url(r'tasks/$', views.w3af_tasks, name='w3af_tasks'),
     url(r'task/(?P<id>[0-9]+)/$', views.w3af_task, name='w3af_task'),
     url(r'delete/(?P<id>[0-9]+)/$', views.w3af_delete, name='w3af_delete'),

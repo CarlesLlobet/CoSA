@@ -52,6 +52,7 @@ def user_can_view_task(function=None):
 @login_required(login_url="/login")
 def sqlmap_howto(request):
     context = crearContextBase(request)
+    context.update({'sqlmap_howto': "active"})
     return render(request, 'sqlmap_howto.html', context)
 
 
@@ -90,6 +91,7 @@ def sqlmap_relaunch(request, id):
     res = sqlmap_results.objects.get(id=id)
     if task.state == "Finished":
         res.output = None
+        res.report = None
         res.finish_date = None
         res.save()
         task.state = "On Hold"
@@ -201,7 +203,7 @@ def sqlmap_download(request, id):
         result = sqlmap_results.objects.get(id=task.id)
         print(result.report)
         # Retornant fitxer
-        nomArxiu = "Report_" + task.name + "_" + datetime.strftime(result.finish_date, "%Y%m%d%H%M") + ".txt"
+        nomArxiu = "Report_" + task.name.replace(" ","-") + "_" + datetime.strftime(result.finish_date, "%Y%m%d%H%M") + ".html"
         response = HttpResponse(result.report, content_type='text/plain')
         response['Content-Disposition'] = 'attachment; filename=' + nomArxiu
         return response

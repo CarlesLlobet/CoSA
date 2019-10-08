@@ -1,19 +1,0 @@
-        ___
-       __H__
- ___ ___[(]_____ ___ ___  {1.1.3.10#dev}
-|_ -| . ["]     | .'| . |
-|___|_  [.]_|_|_|__,|  _|
-      |_|V          |_|   http://sqlmap.org
-
-[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user's responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
-
-[*] starting at 15:07:04
-
-do you want to check for the existence of site's sitemap(.xml) [y/N] n
-[15:07:04] [INFO] starting crawler
-[15:07:04] [INFO] searching for links with depth 1
-[15:07:04] [CRITICAL] connection exception detected (can't establish SSL connection). skipping URL 'https://westeros.fib.upc.edu:8443/neo/web/'
-[15:07:04] [INFO] 1/1 links visited (100%)[15:07:04] [WARNING] no usable links found (with GET parameters)
-
-[*] shutting down at 15:07:04
-

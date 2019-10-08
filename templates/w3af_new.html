@@ -55,19 +55,18 @@
                     </li>
                 </ol>
             </div>
-        </div>
+        </div> -->
         <!-- /.row -->
 
         <div class="row">
             <div class="col-md-12">
-                <h1 class="page-header">
-                    w3af
-                    <small>Nova tasca</small>
-                </h1>
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">w3af<small>New Task</small></h1>
+                </div>
                 <div class="alert alert-info alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <i class="fa fa-info-circle"></i> <strong>Saps com utilitzar w3af?</strong> Més informació <a
-                        href="/w3af/how_to" class="alert-link">aquí</a> sobre el seu funcionament
+                    <i class="fa fa-info-circle"></i> <strong>Do you know how to use w3af?</strong> More information <a
+                        href="/w3af/how_to" class="alert-link">here</a> about its usage.
                 </div>
                 {% if form.non_field_errors %}
                     {% for error in form.non_field_errors %}
@@ -87,7 +86,7 @@
                 <div class="row container-fluid center-block">
                     {% csrf_token %}
                     <div class="col-md-4">
-                        <h3>Nom</h3>
+                        <h3>Name</h3>
                         <br>
                         <div class="row container-fluid">
                             {{ form.name }}
@@ -130,7 +129,7 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <h3>Autenticació</h3>
+                        <h3>Authentication</h3>
                         <br>
                         <div class="row container-fluid center-block">
                             <div class="col-md-12">
@@ -143,14 +142,14 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label>Usuari:</label>
+                                <label>Username:</label>
                                 {{ form.login_username }} <br>
                                 {% if form.login_username.errors %}
                                     <span class="error" style="color:red">
                                     {% for error in form.login_username.errors %}{{ error }}{% endfor %}
                                 </span><br>
                                 {% endif %}
-                                <label>Contrasenya:</label>
+                                <label>Password:</label>
                                 {{ form.login_password }} <br>
                                 {% if form.login_password.errors %}
                                     <span class="error" style="color:red">
@@ -159,14 +158,14 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label>Camp d'usuari:</label>
+                                <label>Username field:</label>
                                 {{ form.login_userfield }} <br>
                                 {% if form.login_userfield.errors %}
                                     <span class="error" style="color:red">
                                     {% for error in form.login_userfield.errors %}{{ error }}{% endfor %}
                                 </span><br>
                                 {% endif %}
-                                <label>Camp de contrasenya:</label>
+                                <label>Password field:</label>
                                 {{ form.login_passwordfield }} <br>
                                 {% if form.login_passwordfield.errors %}
                                     <span class="error" style="color:red">
@@ -175,11 +174,11 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-8">
-                        <h3>Autenticació HTTP Bàsica</h3>
+                        <h3>HTTP Basic Auth</h3>
                         <br>
                         <div class="row container-fluid center-block">
                             <div class="col-md-12">
-                                <label>Domini:</label>
+                                <label>Domain:</label>
                                 {{ form.http_domain }} <br>
                                 {% if form.http_domain.errors %}
                                     <span class="error" style="color:red">
@@ -188,14 +187,14 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label>Usuari:</label>
+                                <label>User:</label>
                                 {{ form.http_user }} <br>
                                 {% if form.http_user.errors %}
                                     <span class="error" style="color:red">
                                     {% for error in form.http_user.errors %}{{ error }}{% endfor %}
                                 </span><br>
                                 {% endif %}
-                                <label>Contrasenya:</label>
+                                <label>Password:</label>
                                 {{ form.http_password }} <br>
                                 {% if form.http_password.errors %}
                                     <span class="error" style="color:red">
@@ -204,14 +203,14 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-6">
-                                <label>Camp d'usuari:</label>
+                                <label>Username field:</label>
                                 {{ form.login_userfield }} <br>
                                 {% if form.login_userfield.errors %}
                                     <span class="error" style="color:red">
                                     {% for error in form.login_userfield.errors %}{{ error }}{% endfor %}
                                 </span><br>
                                 {% endif %}
-                                <label>Camp de contrasenya:</label>
+                                <label>Password field:</label>
                                 {{ form.login_passwordfield }} <br>
                                 {% if form.login_passwordfield.errors %}
                                     <span class="error" style="color:red">
@@ -219,7 +218,7 @@
                                 </span><br>
                                 {% endif %}
                             </div>
-                            <label>Mètode d'accès:</label>
+                            <label>Access method:</label>
                             {{ form.login_method }} <br>
                             {% if form.login_method.errors %}
                                 <span class="error" style="color:red">
@@ -230,32 +229,18 @@
                     </div>
                     <div class="col-md-12">
                         <center>
-                            <label>Perfil:</label>
+                            <label>Profile:</label>
                             {{ form.profile }} <br>
                             {% if form.profile.errors %}
                                 <span class="error" style="color:red">
                                     {% for error in form.profile.errors %}{{ error }}{% endfor %}
                                 </span><br>
                             {% endif %}
+
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="periodicity_checkbox" id="periodicity_checkbox"
-                                           checked="true">Programar
-                                    execució periòdica
-                                </label>
-                            </div>
-                            <div id="periodicitat_menu" style="display: none">
-                                <label>Data d'inici:</label>
-                                {{ form.execute_date }}<br>
-                                <label>Periodicitat:</label>
-                                {{ form.periodicity }}
-                                <br>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="mail" id="mail" checked="true">Enviar resultats per
-                                    correu al
-                                    finalitzar
+                                    <input type="checkbox" name="mail" id="mail" checked="true">Send results by email at
+                                completion.
                                 </label>
                             </div>
                             <div class="form-group input-group col-md-3" id="mail_field" style="display: none">
@@ -268,8 +253,8 @@
                         </span>
                             {% endif %}
                             <br><br><br>
-                            <button type="submit" class="btn btn-primary" name="save">Guardar tasca</button>
-                            <button type="submit" class="btn btn-primary" name="cue">Guardar y encuar tasca</button>
+                            <button type="submit" class="btn btn-primary" name="save">Save task</button>
+                            <button type="submit" class="btn btn-primary" name="cue">Save and execute task</button>
                             <br><br><br>
                         </center>
                     </div>

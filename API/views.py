@@ -18,8 +18,8 @@ from dateutil.relativedelta import relativedelta
 
 from AAPT.settings import openvas_username, openvas_password
 from OpenVAS.models import openvas_results, openvas_requests
-#from SQLmap.models import sqlmap_results, sqlmap_requests
-#from w3af.models import w3af_results, w3af_requests
+from SQLmap.models import sqlmap_results, sqlmap_requests
+from w3af.models import w3af_results, w3af_requests
 
 logger = logging.getLogger(__name__)
 
@@ -179,7 +179,7 @@ class SQLmap_setReport(views.APIView):
         resultat = sqlmap_results.objects.get(id=id)
         print(resultat.id)
         f = request.data['file']
-        resultat.report = f.read().replace("\n", "<br>")
+        resultat.report = f.read().decode('utf-8').replace("\n", "<br>")
         resultat.save()
         return Response(status=204)
     
@@ -247,7 +247,7 @@ class w3af_addResult(views.APIView):
         result = w3af_results.objects.get(id=id)
         print(result.id)
         f = request.data['file']
-        result.output = f.read()
+        result.output = f.read().decode('utf-8').replace("\n", "<br>")
         result.save()
         return Response(status=204)
 
@@ -258,7 +258,7 @@ class w3af_setReport(views.APIView):
         result = w3af_results.objects.get(id=id)
         print(result.id)
         f = request.data['file']
-        result.report = f.read().replace("\n", "<br>")
+        result.report = f.read().decode('utf-8').replace("\n", "<br>")
         result.save()
         return Response(status=204)
 

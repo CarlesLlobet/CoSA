@@ -4,6 +4,10 @@ from operator import itemgetter
 
 from OpenVAS.models import openvas_requests
 from OpenVAS.models import openvas_results
+from SQLmap.models import sqlmap_requests
+from SQLmap.models import sqlmap_results
+from w3af.models import w3af_requests
+from w3af.models import w3af_results
 
 @login_required(login_url="/login")
 def index(request):
@@ -45,7 +49,7 @@ def crearContextBase(request):
             notificacio['finish_date'] = t.finish_date
             notificacio['name'] = request.name
             notificacions.append(notificacio)
-    '''for t in sqlmap_results.objects.all().order_by("finish_date"):
+    for t in sqlmap_results.objects.all().order_by("finish_date"):
         aux = t.id
         request = sqlmap_requests.objects.get(id=aux)
         if request.state == "Finished" and (request.user.id == user.id or user.is_superuser):
@@ -56,8 +60,7 @@ def crearContextBase(request):
             notificacio['finish_date'] = t.finish_date
             notificacio['name'] = request.name
             notificacions.append(notificacio)
-    '''
-    '''
+
     for t in w3af_results.objects.all().order_by("finish_date"):
         aux = t.id
         request = w3af_requests.objects.get(id=aux)
@@ -69,19 +72,19 @@ def crearContextBase(request):
             notificacio['finish_date'] = t.finish_date
             notificacio['name'] = request.name
             notificacions.append(notificacio)
-    '''
+
     notificacions_sorted = sorted(notificacions, key=itemgetter('finish_date'), reverse=True)
 
     # tasques
     tasks = []
     if user.is_superuser:
         openvas_tasks = openvas_requests.objects.all()
-        #sqlmap_tasks = sqlmap_requests.objects.all()
-        #w3af_tasks = w3af_requests.objects.all()
+        sqlmap_tasks = sqlmap_requests.objects.all()
+        w3af_tasks = w3af_requests.objects.all()
     else:
         openvas_tasks = openvas_requests.objects.all().filter(user_id=user.id)
-        #sqlmap_tasks = sqlmap_requests.objects.all().filter(user_id=user.id)
-        #w3af_tasks = w3af_requests.objects.all().filter(user_id=user.id)
+        sqlmap_tasks = sqlmap_requests.objects.all().filter(user_id=user.id)
+        w3af_tasks = w3af_requests.objects.all().filter(user_id=user.id)
     for t in openvas_tasks:
         aux = {}
         aux['tool'] = 'OpenVAS'
@@ -96,7 +99,7 @@ def crearContextBase(request):
         aux['mail'] = t.mail
         aux['config'] = t.config
         tasks.append(aux)
-    '''for t in sqlmap_tasks:
+    for t in sqlmap_tasks:
         aux = {}
         aux['tool'] = 'SQLmap'
         aux['username'] = t.user.username
@@ -113,8 +116,7 @@ def crearContextBase(request):
         aux['pos'] = 0
         aux['mail'] = t.mail
         tasks.append(aux)
-    '''
-    '''
+
     for t in w3af_tasks:
         aux = {}
         aux['tool'] = 'w3af'
@@ -136,16 +138,16 @@ def crearContextBase(request):
         aux['pos'] = 0
         aux['mail'] = t.mail
         tasks.append(aux)
-    '''
+
     for i in tasks:
         if i['state'] == "On Hold":
             if i['tool'] == 'OpenVAS':
                 i['pos'] = len(openvas_requests.objects.filter(state="On Hold", insert_date__lte=i['insert_date']))
-            '''
+
             elif i['tool'] == 'SQLmap':
                 i['pos'] = len(sqlmap_requests.objects.filter(state="On Hold", insert_date__lte=i['insert_date']))
             elif i['tool'] == 'w3af':
                 i['pos'] = len(w3af_requests.objects.filter(state="On Hold", insert_date__lte=i['insert_date']))
-            '''
+
     tasks_sorted = sorted(tasks, key=itemgetter('insert_date'), reverse=True)
     return {'notificacions': notificacions_sorted, 'user': user, 'tasks': tasks_sorted}

@@ -52,6 +52,7 @@ def user_can_view_task(function=None):
 @login_required(login_url="/login")
 def w3af_howto(request):
     context = crearContextBase(request)
+    context.update({'w3af_howto': "active"})
     return render(request, 'w3af_howto.html', context)
 
 
@@ -90,6 +91,7 @@ def w3af_relaunch(request, id):
     res = w3af_results.objects.get(id=id)
     if task.state == "Finished":
         res.output = None
+        res.report = None
         res.finish_date = None
         res.save()
         task.state = "On Hold"
@@ -175,16 +177,24 @@ def w3af_modify(request, id):
             form.fields["target"].initial = task.target
             form.fields["target_os"].initial = task.target_os
             form.fields["target_framework"].initial = task.target_framework
-            form.fields["target_login_url"].initial = task.login_url
-            form.fields["login_username"].initial = task.login_username
-            form.fields["login_password"].initial = task.login_password
-            form.fields["login_userfield"].initial = task.login_userfield
-            form.fields["login_passwordfield"].initial = task.login_passwordfield
+            if task.login_url:
+                form.fields["target_login_url"].initial = task.login_url
+            if task.login_username:
+                form.fields["login_username"].initial = task.login_username
+            if task.login_password:
+                form.fields["login_password"].initial = task.login_password
+            if task.login_userfield:
+                form.fields["login_userfield"].initial = task.login_userfield
+            if task.login_passwordfield:
+                form.fields["login_passwordfield"].initial = task.login_passwordfield
+            if task.http_domain:
+                form.fields["http_domain"].initial = task.http_domain
+            if task.http_user:
+                form.fields["http_user"].initial = task.http_user
+            if task.http_password:
+                form.fields["http_password"].initial = task.http_password
             form.fields["login_method"].initial = task.login_method
             form.fields["profile"].initial = task.profile
-            form.fields["http_domain"].initial = task.http_domain
-            form.fields["http_user"].initial = task.http_user
-            form.fields["http_password"].initial = task.http_password
             context.update({"initial": 1})
             if task.mail:
                 form.fields["mail_field"].initial = task.mail
@@ -209,7 +219,7 @@ def w3af_download(request, id):
         result = w3af_results.objects.get(id=task.id)
         #print(result.report)
         # Retornant fitxer
-        nomArxiu = "Report_" + task.name + "_" + datetime.strftime(result.finish_date, "%Y%m%d%H%M") + ".html"
+        nomArxiu = "Report_" + task.name.replace(" ","-") + "_" + datetime.strftime(result.finish_date, "%Y%m%d%H%M") + ".html"
         response = HttpResponse(result.report, content_type='text/html')
         response['Content-Disposition'] = 'attachment; filename=' + nomArxiu
         return response
@@ -248,9 +258,6 @@ def w3af_new(request):
             p = form.cleaned_data['profile']
             m = form.cleaned_data['mail']
             mf = form.cleaned_data['mail_field']
-            pc = form.cleaned_data['periodicity_checkbox']
-            ed = form.cleaned_data['execute_date']
-            pd = form.cleaned_data['periodicity']
             if 'save' in request.POST:
                 e = "Saved"
             elif 'cue' in request.POST:

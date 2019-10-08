@@ -6,8 +6,8 @@ TASKS=2 # Number of w3af tasks to execute concurrently
 SOURCE="${BASH_SOURCE[0]}"
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 TMP=`dirname $0`
-PYTHON=/root/AAPT/AAPT/pythonenv/bin/python
-W3AF=/root/AAPT/AAPT/w3af/w3af_console
+PYTHON=python2
+W3AF="$TMP"/w3af/w3af_console
 
 # Test number of parameters
 if [[ $# -le 0 ]]; then
@@ -16,12 +16,12 @@ if [[ $# -le 0 ]]; then
     if (( $N < $TASKS )); then
             #Select the oldest request
             # id|target|target_os|target_framework|profile|login_url|login_username|login_password|login_userfield|login_passwordfield|login_method
-            read id target target_os target_framework profile login_url login_username login_password login_userfield login_passwordfield login_method http_domain http_user http_password<<< `curl -k -X GET http://localhost:8080/API/w3af/get_next/|sed 's/\"//g'|tr "|" "\n"`
+            read -d "\n" id target target_os target_framework profile login_url login_username login_password login_userfield login_passwordfield login_method http_domain http_user http_password<<< `curl -k -X GET http://localhost:8080/API/w3af/get_next/|sed 's/\"//g'|tr "|" "\n"`
             if [[ $id ]];then
                 #Log parametres
                 echo "id = " $id ", target = " $target ", target_os = " $target_os ", target_framework = " $target_framework ", profile = " $profile ", login_url = " $login_url ", login_username = " $login_username ", login_password = " $login_password ", login_userfield = " $login_userfield ", login_passwordfield = " $login_passwordfield ", login_method = " $login_method
                 
-		#Crear w3af.run amb la info de la task i posar a Running la task
+		            #Crear w3af.run amb la info de la task i posar a Running la task
                 touch $TMP/.running"$N"
                 curl -k -X PUT -d state=Running http://localhost:8080/API/w3af/set_state/$id/
 
@@ -32,7 +32,7 @@ if [[ $# -le 0 ]]; then
                 echo "# Configure HTTP settings" >> "$TMP"/execute"$N".w3af
                 echo "      http-settings" >> "$TMP"/execute"$N".w3af
                 echo "      set timeout 30" >> "$TMP"/execute"$N".w3af
-                if [[ $http_domain != "buit" && $http_user != "buit" && $http_password != "buit" ]]; then
+                if [[ $http_domain != "empty" && $http_user != "empty" && $http_password != "empty" ]]; then
                     echo "      set basic_auth_user $http_user" >> "$TMP"/execute"$N".w3af
                     echo "      set basic_auth_passwd $http_password" >> "$TMP"/execute"$N".w3af
                     echo "      set basic_auth_domain $http_domain" >> "$TMP"/execute"$N".w3af
@@ -50,19 +50,19 @@ if [[ $# -le 0 ]]; then
                 echo "  profiles" >> "$TMP"/execute"$N".w3af
                 echo "  use $profile" >> "$TMP"/execute"$N".w3af
                 echo "  back" >> "$TMP"/execute"$N".w3af
-                if [[ $login_username != "buit" && $login_password != "buit" ]]; then
+                if [[ $login_username != "empty" && $login_password != "empty" ]]; then
                     echo "#Configure target authentication" >> "$TMP"/execute"$N".w3af
                     echo "      auth detailed" >> "$TMP"/execute"$N".w3af
                     echo "      auth config detailed" >> "$TMP"/execute"$N".w3af
                     echo "      set username $login_username" >> "$TMP"/execute"$N".w3af
                     echo "      set password $login_password" >> "$TMP"/execute"$N".w3af
-                    if [[ $login_method  != "buit" ]]; then
+                    if [[ $login_method  != "empty" ]]; then
                         echo "      set method $login_method" >> "$TMP"/execute"$N".w3af
                     fi
-                    if [[ $login_url  != "buit" ]]; then
+                    if [[ $login_url  != "empty" ]]; then
                         echo "      set auth_url $login_url" >> "$TMP"/execute"$N".w3af
                     fi
-                    if [[ $login_userfield != "buit" && $login_passwordfield != "buit" ]]; then
+                    if [[ $login_userfield != "empty" && $login_passwordfield != "empty" ]]; then
                         echo "      set username_field $login_userfield" >> "$TMP"/execute"$N".w3af
                         echo "      set password_field $login_passwordfield" >> "$TMP"/execute"$N".w3af
                     fi
@@ -72,7 +72,7 @@ if [[ $# -le 0 ]]; then
                 echo "      plugins" >> "$TMP"/execute"$N".w3af
                 echo "      output console, html_file" >> "$TMP"/execute"$N".w3af
                 echo "      output config html_file" >> "$TMP"/execute"$N".w3af
-                echo "      set output_file $TMP/w3af"$N".results.html" >> "$TMP"/execute"$N".w3af
+                echo "      set output_file $TMP/w3af.results"$N".html" >> "$TMP"/execute"$N".w3af
                 echo "      set verbose False" >> "$TMP"/execute"$N".w3af
                 echo "      back" >> "$TMP"/execute"$N".w3af
                 echo "      output config console" >> "$TMP"/execute"$N".w3af
@@ -95,7 +95,7 @@ if [[ $# -le 0 ]]; then
                 fi
 
                 #Call w3af with the script
-                $PYTHON $W3AF -s "$TMP"/execute"$N".w3af > "$TMP"/w3af"$N".results &
+                $PYTHON $W3AF -s "$TMP"/execute"$N".w3af > "$TMP"/w3af.results"$N" 2>&1 &
                 PID=$!
 
                 while kill -0 $PID
@@ -104,8 +104,8 @@ if [[ $# -le 0 ]]; then
                     if [ $STATE == '"Blocked"' ]; then
                         kill -9 $PID
                         curl -k  -X GET http://localhost:8080/API/w3af/kill/$id/
-                        rm $TMP/.running"$N"
-			rm "$TMP"/execute"$N".w3af
+                        rm "$TMP"/.running"$N"
+			                  rm "$TMP"/execute"$N".w3af
                         exit
                     fi
                     sleep $SECONDS
@@ -113,28 +113,28 @@ if [[ $# -le 0 ]]; then
                 
 
                 #Deleting all the <br> from the html output
-                output=`cat "$TMP"/w3af"$N".results.html`
-                sed -i 's/<br>//g' "$TMP"/w3af"$N".results.html
+                output=`cat "$TMP"/w3af.results"$N".html`
+                sed -i 's/<br>//g' "$TMP"/w3af.results"$N".html
 
-		#Copy the full HTML to save it later
-		cp $TMP/w3af"$N".results.html $TMP/w3af"$N".results.full
+		            #Copy the full HTML to save it later
+		            cp $TMP/w3af.results"$N".html $TMP/w3af.results"$N".full
 
                 #Deleting all stylings (bootstrap and others)
-                sed -i '/<style>/,/<\/style>/d' "$TMP"/w3af"$N".results.html
+                sed -i '/<style>/,/<\/style>/d' "$TMP"/w3af.results"$N".html
 
-		#Deleting also all HTTP responses to see better
-		sed -i '/<pre>/,/<\/pre>/d' "$TMP"/w3af"$N".results.html
+                #Deleting also all HTTP responses to see better
+                sed -i '/<pre>/,/<\/pre>/d' "$TMP"/w3af.results"$N".html
                 echo -e "$output"
-                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af"$N".results.html;type=text/plain" http://localhost:8080/API/w3af/add_results/$id/
-                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af"$N".results.full;type=text/plain" http://localhost:8080/API/w3af/add_report/$id/
+                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af.results"$N".html;type=text/plain" http://localhost:8080/API/w3af/add_results/$id/
+                curl  -k -X PUT -H "Content-Type:multipart/form-data" -F "file=@"$TMP"/w3af.results"$N".full;type=text/plain" http://localhost:8080/API/w3af/add_report/$id/
 
-                curl  -k -X PUT -d state=Finalitzada http://localhost:8080/API/w3af/set_state/$id/
-		
-		rm "$TMP"/execute"$N".w3af
-		rm $TMP/w3af"$N".results.html
-		rm $TMP/w3af"$N".results.full
-		rm $TMP/w3af"$N".results
                 rm $TMP/.running"$N"
+                curl  -k -X PUT -d state=Finished http://localhost:8080/API/w3af/set_state/$id/
+
+                #rm "$TMP"/execute"$N".w3af
+                #rm $TMP/w3af.results"$N".html
+                #rm $TMP/w3af.results"$N".full
+                #rm $TMP/w3af.results"$N"
             else
                 exit
             fi

@@ -8,44 +8,44 @@
     {% if results == "fail" %}
         <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <i class="fa fa-exclamation-circle"></i> <strong>Aquesta encara no té report</strong>
+            <i class="fa fa-exclamation-circle"></i> <strong>This task does not have report yet</strong>
         </div>
     {% endif %}
     {% if task.modify_date and results.finish_date %}
         {% if task.modify_date > results.finish_date %}
             <div class="alert alert-warning alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <i class="fa fa-exclamation-circle"></i> <strong>Aquesta tasca es va modificar després de obtenir
-                aquests resultats, pel que la configuració i els resultats poden no concordar.</strong>
+                <i class="fa fa-exclamation-circle"></i> <strong>This task was modified after obtaining this results, so the parameters and the obtained results might not fit.</strong>
             </div>
         {% endif %}
     {% endif %}
-    <div class="panel-heading">
-        <h1><i class="fa fa-shield fa-fw"></i> Tasca: {{ task.name }} </h1>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">w3af Tasks</h1>
+                <h1><i class="fa fa-tachometer fa-fw"></i> Task: {{ task.name }} </h1>
     </div>
     <div class="col-md-5">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Informació de la tasca
+                    Task information
                 </div>
                 <div class="panel-body">
                     {% if user.is_staff %}
                         <p>
-                            <strong>Usuari: </strong> {{ task.user }}
+                            <strong>User: </strong> {{ task.user }}
                         </p>
                     {% endif %}
                     <p>
-                        <strong>Estat: </strong> {{ task.estat }}
-                        {% if task.estat != "Esperant" %}
+                        <strong>State: </strong> {{ task.state }}
+                        {% if task.state != "On Hold" %}
                             <div class="progress progress-striped">
-                                <div {% if task.estat == "Finalitzada" %}
+                                <div {% if task.state == "Finished" %}
                                     class="progress-bar progress-bar-success" aria-valuenow="100"
                                     style="width: 100%"
-                                {% elif task.estat == "Executant" %}
+                                {% elif task.state == "Running" %}
                                     class="progress-bar progress-bar-info active"
                                     aria-valuenow="70" style="width: 70%"
-                                {% elif task.estat == "Bloquejada" %}
+                                {% elif task.state == "Blocked" %}
                                     class="progress-bar progress-bar-danger active" aria-valuenow="30"
                                     style="width: 30%"{% endif %}
                                     role="progressbar" aria-valuemin="0" aria-valuemax="100">
@@ -70,61 +70,48 @@
                         <strong>URL del Login: </strong> {{ task.login_url }}
                     </p>
                     <p>
-                        <strong>Nom d'usuari de Login: </strong> {{ task.login_username }}
+                        <strong>Login username: </strong> {{ task.login_username }}
                     </p>
                     <p>
-                        <strong>Camp de login d'usuari: </strong> {{ task.login_usernamefield }}
+                        <strong>Username field: </strong> {{ task.login_usernamefield }}
                     </p>
                     <p>
-                        <strong>Camp de login de contrasenya: </strong> {{ task.login_passwordfield }}
+                        <strong>Password field: </strong> {{ task.login_passwordfield }}
                     </p>
                     <p>
-                        <strong>Mètode d'accès: </strong> {{ task.login_method }}
+                        <strong>Access method: </strong> {{ task.login_method }}
                     </p>
 
                     <p>
-                        <strong>Data d'inserció: </strong> {{ task.insert_date }}
+                        <strong>Insertion Date: </strong> {{ task.insert_date }}
                     </p>
                     {% if task.modify_date %}
                         <p>
-                            <strong>Última modificació: </strong> {{ task.modify_date }}
+                            <strong>Last modification: </strong> {{ task.modify_date }}
                         </p>
                     {% endif %}
                     <p>
-                        <strong>Correu: </strong> {% if task.mail %}
+                        <strong>Mail: </strong> {% if task.mail %}
                         <td>Sí ({{ task.mail }})</td>{% else %}
                         <td>No</td>{% endif %}
                     </p>
-                    {% if task.periodicity %}
-                        <p>
-                            <strong>Periodicitat: </strong> {{ task.periodicity }}
-                        </p>
-                        <p>
-                            <strong>Propera execució: </strong>
-                            {{ task.next_execution }}
-                        </p>
-                    {% else %}
-                        <p>
-                            <strong>Periodicitat: </strong> No
-                        </p>
-                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-7 align-center">
         <button type="submit"
-                class="btn btn-primary {% if task.estat != "Finalitzada" and task.estat != "Planificada" %}disabled" disabled="disabled{% endif %}"
+                class="btn btn-primary {% if task.state != "Finished" and task.state != "Saved" %}disabled" disabled="disabled{% endif %}"
                 onclick="window.location.href='{% url 'w3af_relaunch' task.id %}'">
             Encuar de nou
         </button>
         <button type="submit"
-                class="btn btn-default {% if task.estat == "Executant" or task.estat == "Bloquejada" %}disabled" disabled="disabled{% endif %}"
+                class="btn btn-default {% if task.state == "Running" or task.state == "Blocked" %}disabled" disabled="disabled{% endif %}"
                 onclick="window.location.href='{% url 'w3af_modify' task.id %}'">
             Modificar
         </button>
         <button type="submit"
-                class="btn btn-danger {% if task.estat == "Bloquejada" %}disabled" disabled="disabled{% endif %}"
+                class="btn btn-danger {% if task.state == "Blocked" %}disabled" disabled="disabled{% endif %}"
                 onclick="window.location.href='{% url 'w3af_delete' task.id %}'">
             Eliminar
         </button>
@@ -132,17 +119,14 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                Resultats ({{ results.finish_date }})
+                Results ({{ results.finish_date }})
                 <button type="submit"
                         class="btn btn-primary pull-right {% if not results.report %}disabled" disabled="disabled{% endif %}"
-                        onclick="window.location.href='{% url 'w3af_download' task.id %}'">Descarregar Report Complet
+                        onclick="window.location.href='{% url 'w3af_download' task.id %}'">Download Full Report
                 </button>
             </div>
             <div class="panel-body">
-                {{ results.sortida|safe }}
-                <!--<pre style="font-family: 'Lucida Console', Monaco, monospace">
-                    {{ results.report|safe }}
-                </pre> -->
+                {{ results.output|safe }}
             </div>
         </div>
     </div>

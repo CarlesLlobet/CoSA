@@ -41,7 +41,7 @@ $.fn.dataTableExt.oPagination.extStyle = {
         nNext = $('<span/>', { 'class': 'paginate_button next' , text : ">" });
         nLast = $('<span/>', { 'class': 'paginate_button last' , text : ">>" });
         nPageTxt = $("<span />", { text: 'Page' });
-        nPageNumBox = $('<input />', { type: 'text', val: 1, 'class': 'pageinate_input_box' });
+        nPageNumBox = $('<input />', { type: 'text', val: 1, 'class': 'pagtoolte_input_box' });
         nPageOf = $('<span />', { text: '/' });
         nTotalPages = $('<span />', { class :  "paginate_total" , text : oPaging.iTotalPages });
 
@@ -111,7 +111,7 @@ $.fn.dataTableExt.oPagination.extStyle = {
         var an = oSettings.aanFeatures.p;
 
         $(an).find('span.paginate_total').html(oPaging.iTotalPages);
-        $(an).find('.pageinate_input_box').val(oPaging.iPage+1);
+        $(an).find('.pagtoolte_input_box').val(oPaging.iPage+1);
                 
         $(an).each(function(index,item) {
 

@@ -66,8 +66,8 @@ INSTALLED_APPS = [
     'Core.apps.CoreConfig',
     'API.apps.APIConfig',
     'OpenVAS.apps.OpenVASConfig',
-    #'SQLmap.apps.SqlmapConfig',
-    #'w3af.apps.w3afConfig'
+    'SQLmap.apps.SqlmapConfig',
+    'w3af.apps.w3afConfig'
 ]
 
 MIDDLEWARE = [

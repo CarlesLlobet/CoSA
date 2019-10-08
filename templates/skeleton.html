@@ -127,49 +127,7 @@
 <!-- Javascript de sliders -->
 <script src={% static "js/bootstrap-slider.js" %}></script>
 
-<!-- Taula de peticions -->
-<script>
-    $(document).ready(function () {
-        //Pujar periodicities
-        if (!$("#id_mail_field").val()) {
-            $("#id_mail_field").val("{{ user.username }}@applus.com");
-            $("#mail_field").slideUp(0);
-            $("#mail").prop('checked', false);
-        }
-        else {
-            $("#mail_field").slideDown(0);
-        }
-        if (!$("#id_execute_date").val()) {
-            $("#periodicitat_menu").slideUp(0);
-            $("#periodicity_checkbox").prop('checked', false);
-        } else {
-            $("#periodicitat_menu").slideDown(0);
-        }
-        $("#periodicitat_menu").display = "visible";
-        $("#mail_field").display = "visible";
-        // Ordenar taula general
-        $('#dataTable-myTasks').DataTable({
-            responsive: true,
-            {% if user.is_staff %} order: [[5, 'desc']],
-            {% else %} order: [[4, 'desc']],
-            {% endif %}
-        });
-        // Ordenar taula SQLmap
-        $('#dataTable-SQLmap').DataTable({
-            responsive: true,
-            {% if user.is_staff %} order: [[9, 'desc']],
-            {% else %} order: [[8, 'desc']],
-            {% endif %}
-        });
-        //Ordenar taula OpenVAS
-        $('#dataTable-OpenVAS').DataTable({
-            responsive: true,
-            {% if user.is_staff %} order: [[5, 'desc']],
-            {% else %} order: [[4, 'desc']],
-            {% endif %}
-        });
-    });
-</script>
+
 
 <script>
     $('#periodicity_checkbox').click(function () {
@@ -231,6 +189,50 @@
 <!-- Page level custom scripts -->
 <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
 <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+<!-- Taula de peticions -->
+<script>
+    $(document).ready(function () {
+        //Pujar periodicities
+        if (!$("#id_mail_field").val()) {
+            $("#id_mail_field").val("{{ user.username }}@applus.com");
+            $("#mail_field").slideUp(0);
+            $("#mail").prop('checked', false);
+        }
+        else {
+            $("#mail_field").slideDown(0);
+        }
+        if (!$("#id_execute_date").val()) {
+            $("#periodicitat_menu").slideUp(0);
+            $("#periodicity_checkbox").prop('checked', false);
+        } else {
+            $("#periodicitat_menu").slideDown(0);
+        }
+        $("#periodicitat_menu").display = "visible";
+        $("#mail_field").display = "visible";
+        // Ordenar taula general
+        $('#dataTable-myTasks').DataTable({
+            responsive: true,
+            {% if user.is_staff %} order: [[5, 'desc']],
+            {% else %} order: [[4, 'desc']],
+            {% endif %}
+        });
+        // Ordenar taula SQLmap
+        $('#dataTable-SQLmap').DataTable({
+            responsive: true,
+            {% if user.is_staff %} order: [[9, 'desc']],
+            {% else %} order: [[8, 'desc']],
+            {% endif %}
+        });
+        //Ordenar taula OpenVAS
+        $('#dataTable-OpenVAS').DataTable({
+            responsive: true,
+            {% if user.is_staff %} order: [[5, 'desc']],
+            {% else %} order: [[4, 'desc']],
+            {% endif %}
+        });
+    });
+</script>
 
 </body>
 

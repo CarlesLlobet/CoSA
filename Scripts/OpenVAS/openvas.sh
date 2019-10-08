@@ -19,25 +19,29 @@ then
         IFS=";" read -r -d "\n" id target ID_TARGET ID_CONFIG ID_TASK ID_TASK_STARTED < $TMP/.running"$COUNTER"
         echo $id", "$target", "$ID_TARGET", "$ID_CONFIG", "$ID_TASK", "$ID_TASK_STARTED
         #Updating how is task
-        read state <<< `$BINDIR/omp -u "$USER" -w "$PASSWD" -G "$ID_TASK" | head -1 | awk -F ' ' '{print $2}'`
-        echo $state
-        if [ "$state" == "Running" ]
+        read ompstate <<< `$BINDIR/omp -u "$USER" -w "$PASSWD" -G "$ID_TASK" | head -1 | awk -F ' ' '{print $2}'`
+        echo $ompstate
+        if [ "$ompstate" == "Running" ]
         then
             read percentage <<< `$BINDIR/omp -u "$USER" -w "$PASSWD" -G "$ID_TASK" | head -1 | awk -F ' ' '{print $3}'| cut -f1 -d%`
             echo $percentage
-	        curl -k -X PUT -d percentage=$percentage http://localhost:8080/API/OpenVAS/set_percentage/$id/
-	        STATE=`curl -k -X GET http://localhost:8080/API/OpenVAS/get_state/$id/`
-		    if [ "$STATE" == "Blocked" ]; then
-		        STOP_TASK = `$BINDIR/omp --pretty-print -u "$USER" -w "$PASSWD" --xml=" <stop_task task_id=\"$ID_TASK\"/>"`
-		        REMOVE_TASK = `$BINDIR/omp --pretty-print -u "$USER" -w "$PASSWD" --xml=" <delete_task task_id=\"$ID_TASK\"/>"`
-		        rm $TMP/.running"$COUNTER"
-		        curl -k -X GET http://localhost:8080/API/OpenVAS/kill/$id/
-		        let N-=1
-		    fi
-        elif [ "$state" == "Done" ]; then
+	          curl -k -X PUT -d percentage=$percentage http://localhost:8080/API/OpenVAS/set_percentage/$id/
+            STATE=`curl -k -X GET http://localhost:8080/API/OpenVAS/get_state/$id/`
+            echo $STATE
+            if [ "$STATE" == '"Blocked"' ]; then
+                STOP_TASK=`$BINDIR/omp --pretty-print -u "$USER" -w "$PASSWD" --xml=" <stop_task task_id=\"$ID_TASK\"/>"`
+                echo $STOP_TASK
+                REMOVE_TASK=`$BINDIR/omp --pretty-print -u "$USER" -w "$PASSWD" --xml=" <delete_task task_id=\"$ID_TASK\"/>"`
+                echo $REMOVE_TASK
+                rm $TMP/.running"$COUNTER"
+                curl -k -X GET http://localhost:8080/API/OpenVAS/kill/$id/
+                let N-=1
+            fi
+        elif [ "$ompstate" == "Done" ]; then
             STATE=`curl -k -X GET http://localhost:8080/API/OpenVAS/get_state/$id/`
             if [ "$STATE" == "Blocked" ]; then
-                REMOVE_TASK = `$BINDIR/omp --pretty-print -u "$USER" -w "$PASSWD" --xml=" <delete_task task_id=\"$ID_TASK\"/>"`
+                REMOVE_TASK=`$BINDIR/omp --pretty-print -u "$USER" -w "$PASSWD" --xml=" <delete_task task_id=\"$ID_TASK\"/>"`
+                echo $REMOVE_TASK
                 curl -k -X GET http://localhost:8080/API/OpenVAS/kill/$id/
             else
                     percentage=100
@@ -47,7 +51,7 @@ then
             rm $TMP/.running"$COUNTER"
             let N-=1
         else
-            echo $state" is not Done nor Running"
+            echo $ompstate" is not Done nor Running"
         fi
         let COUNTER-=1
     done
@@ -63,8 +67,8 @@ then
     id=`echo $next|cut -f1 -d "|"|tr -d '[[:space:]]'`
     target=`echo $next|cut -f2 -d "|"|tr -d '[[:space:]]'`
     config=`echo $next|cut -f3 -d "|"`
-	if [[ $id ]]; then
-	    echo "Task found: " $id", "$target", "$config
+	  if [[ $id ]]; then
+	      echo "Task found: " $id", "$target", "$config
 
         #Search for target and if it exists take the id, otherwise create it
         read -d "\n" ID_TARGET aux <<< `$BINDIR/omp -u "$USER" -w "$PASSWD" -T | grep $target|tr " " "\n"`

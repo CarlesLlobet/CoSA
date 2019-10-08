@@ -41,7 +41,35 @@
             </div>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {% if not sqlmap_tasks and not sqlmap_new %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseSQLmap"
+               aria-expanded="true" aria-controls="collapseSQLmap">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>SQLmap</span>
+            </a>
+            <div id="collapseSQLmap" class="collapse {% if sqlmap_tasks or sqlmap_new %}show{% endif %}" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ sqlmap_tasks }}" href="{% url 'sqlmap_tasks' %}">Tasks</a>
+                    <a class="collapse-item {{ sqlmap_new }}" href="{% url 'sqlmap_new' %}">New task</a>
+                </div>
+            </div>
+        </li>
 
+        <li class="nav-item">
+            <a class="nav-link {% if not w3af_tasks and not w3af_new %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapsew3af"
+               aria-expanded="true" aria-controls="collapsew3af">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>w3af</span>
+            </a>
+            <div id="collapsew3af" class="collapse {% if w3af_tasks or w3af_new %}show{% endif %}" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ w3af_tasks }}" href="{% url 'w3af_tasks' %}">Tasks</a>
+                    <a class="collapse-item {{ w3af_new }}" href="{% url 'w3af_new' %}">New task</a>
+                </div>
+            </div>
+        </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -52,17 +80,20 @@
     </div>
 
     <li class="nav-item">
-        <a class="nav-link {% if not openvas_howto %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseGuides"
+        <a class="nav-link {% if not openvas_howto and not sqlmap_howto and not w3af_howto %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#collapseGuides"
            aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-book"></i>
             <span>Usage Guides</span>
         </a>
-        <div id="collapseGuides" class="collapse {% if openvas_howto %}show{% endif %}" aria-labelledby="headingUtilities"
+        <div id="collapseGuides" class="collapse {% if openvas_howto or sqlmap_howto or w3af_howto %}show{% endif %}" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ openvas_howto }}" href="{% url 'openvas_howto' %}">OpenVAS</a>
+                <a class="collapse-item {{ sqlmap_howto }}" href="{% url 'sqlmap_howto' %}">SQLmap</a>
+                <a class="collapse-item {{ w3af_howto }}" href="{% url 'w3af_howto' %}">w3af</a>
             </div>
         </div>
+
     </li>
 
     <li class="nav-item">
