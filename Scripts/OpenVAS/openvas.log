@@ -1,4 +1,10 @@
-No running tasks
+Already running 1 tasks from the buffer
+Testing the: 0
+/root/Documents/Scripts/OpenVAS/openvas.sh: line 19: /root/Documents/Scripts/OpenVAS/.running0: No such file or directory
+, , , , , 
+Failed to acquire socket.
+
+ is not Done nor Running
 Searching new task
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed

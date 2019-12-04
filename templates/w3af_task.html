@@ -103,17 +103,17 @@
         <button type="submit"
                 class="btn btn-primary {% if task.state != "Finished" and task.state != "Saved" %}disabled" disabled="disabled{% endif %}"
                 onclick="window.location.href='{% url 'w3af_relaunch' task.id %}'">
-            Encuar de nou
+            Execute
         </button>
         <button type="submit"
                 class="btn btn-default {% if task.state == "Running" or task.state == "Blocked" %}disabled" disabled="disabled{% endif %}"
                 onclick="window.location.href='{% url 'w3af_modify' task.id %}'">
-            Modificar
+            Modify
         </button>
         <button type="submit"
                 class="btn btn-danger {% if task.state == "Blocked" %}disabled" disabled="disabled{% endif %}"
                 onclick="window.location.href='{% url 'w3af_delete' task.id %}'">
-            Eliminar
+            Delete
         </button>
     </div>
     <div class="col-md-12">

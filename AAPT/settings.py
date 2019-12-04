@@ -33,7 +33,7 @@ SECRET_KEY = '&g$50ohs*#4d0upl9suu&@ey^w2*(v*1j!42)np$4xzg*o2-va'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = valid_domains
 
 LOGGING = {
     'version': 1,
