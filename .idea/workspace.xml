@@ -2,16 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4909b7c9-11e4-424c-9d92-321cf428bd25" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/89647a8d-8db6-4792-9469-67c30d792d04.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/89647a8d-8db6-4792-9469-67c30d792d04.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AAPT/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/AAPT/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/OpenVAS/openvas.log" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/OpenVAS/openvas.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/OpenVAS/openvas_clean.log" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/OpenVAS/openvas_clean.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/w3af/w3af.log" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/w3af/w3af.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OpenVAS/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/OpenVAS/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sqlmap_task.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sqlmap_task.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/w3af_task.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/w3af_task.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -166,8 +160,16 @@
       <workItem from="1574934145862" duration="1054000" />
       <workItem from="1574935643133" duration="3934000" />
       <workItem from="1575026332057" duration="15787000" />
-      <workItem from="1575472485907" duration="1993000" />
+      <workItem from="1575472485907" duration="3073000" />
     </task>
+    <task id="LOCAL-00001" summary="Fixed Allowed Hosts">
+      <created>1575475385194</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1575475385194</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,5 +190,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fixed Allowed Hosts" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Allowed Hosts" />
   </component>
 </project>

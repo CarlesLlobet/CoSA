@@ -1,0 +1,54 @@
+[34mw3af>>> [0mhttp-settings
+[34mw3af/config:http-settings>>> [0mset timeout 30
+[34mw3af/config:http-settings>>> [0mback
+The configuration has been saved.
+[34mw3af>>> [0mmisc-settings
+[34mw3af/config:misc-settings>>> [0mset max_discovery_time 20
+[34mw3af/config:misc-settings>>> [0mset fuzz_cookies True
+[34mw3af/config:misc-settings>>> [0mset fuzz_form_files True
+[34mw3af/config:misc-settings>>> [0mset fuzz_url_parts True
+[34mw3af/config:misc-settings>>> [0mset fuzz_url_filenames True
+[34mw3af/config:misc-settings>>> [0mback
+The configuration has been saved.
+[34mw3af>>> [0mprofiles
+[34mw3af/profiles>>> [0muse fast_scan
+The plugins configured by the scan profile have been enabled, and their options configured.
+Please set the target URL(s) and start the scan.
+[34mw3af/profiles>>> [0mback
+[34mw3af>>> [0mplugins
+[34mw3af/plugins>>> [0moutput console, html_file
+[34mw3af/plugins>>> [0moutput config html_file
+[34mw3af/plugins/output/config:html_file>>> [0mset output_file /root/Documents/Scripts/w3af/w3af.results0.html
+[34mw3af/plugins/output/config:html_file>>> [0mset verbose False
+[34mw3af/plugins/output/config:html_file>>> [0mback
+The configuration has been saved.
+[34mw3af/plugins>>> [0moutput config console
+[34mw3af/plugins/output/config:console>>> [0mset verbose False
+[34mw3af/plugins/output/config:console>>> [0mback
+The configuration has been saved.
+[34mw3af/plugins>>> [0mback
+[34mw3af>>> [0mtarget
+[34mw3af/config:target>>> [0mset target http://192.168.25.120:8080
+[34mw3af/config:target>>> [0mset target_os unix
+[34mw3af/config:target>>> [0mset target_framework php
+[34mw3af/config:target>>> [0mback
+The configuration has been saved.
+[34mw3af>>> [0mcleanup
+[34mw3af>>> [0mstart
+[37mThe following error was detected and could not be resolved:
+The remote web server is not answering our HTTP requests, multiple errors have been found while trying to GET a response from the server.
+
+In most cases this means that the configured target is incorrect, the port is closed, there is a firewall blocking our packets or there is no HTTP daemon listening on that port.
+
+Please verify your target configuration and try again. The tested targets were:
+
+  - http://192.168.25.120:8080/
+
+
+
+[0mScan finished in 35 seconds
+Stopping the core...
+[34mw3af>>> [0mexit
+[34mw3af>>> [0m
+Liked it? Contribute with some lines of code!
+

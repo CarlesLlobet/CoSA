@@ -112,7 +112,7 @@ class OpenVASForm(forms.Form):
         urls = cleaned_data.get("urls")
         ips = cleaned_data.get("ips")
         config = cleaned_data.get("config")
-
+        print(ips)
         if (config == "Full and fast ultimate" or config == "Full and very deep ultimate")and (not can_ultimate(self.user)):
             raise forms.ValidationError(
                  _("You are not allowed to scan in Ultimate mode, please contact your administrator if you need this permission. "))

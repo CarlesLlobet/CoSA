@@ -1,0 +1,39 @@
+# -----------------------------------------------------------------------------------------------------------
+#                               W3AF AUDIT SCRIPT FOR WEB APPLICATION                                         
+# -----------------------------------------------------------------------------------------------------------
+# Configure HTTP settings
+      http-settings
+      set timeout 30
+      back
+# Configure scanner global behaviors
+      misc-settings
+      set max_discovery_time 20
+      set fuzz_cookies True
+      set fuzz_form_files True
+      set fuzz_url_parts True
+      set fuzz_url_filenames True
+      back
+#Define profile to use
+  profiles
+  use fast_scan
+  back
+#Configure reporting in order to generate an HTML report
+      plugins
+      output console, html_file
+      output config html_file
+      set output_file /root/Documents/Scripts/w3af/w3af.results0.html
+      set verbose False
+      back
+      output config console
+      set verbose False
+      back
+      back
+#Set target informations, do a cleanup and run the scan
+      target
+      set target http://192.168.25.120:8080
+      set target_os unix
+      set target_framework php
+      back
+      cleanup
+      start
+      exit

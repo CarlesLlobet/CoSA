@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Application Security Scan Report for 192.168.25.120</title>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="thumbnail">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>
+                        <p class="text-center">Application Security Scan for 192.168.25.120</p>
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    <h4>Meta-data</h4>
+                    <p>This report contains the application security scan results
+                    for the w3af scan of the 192.168.25.120 which finished
+                    11.10.2019</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>Configured target URLs</h4>
+                    <ul>
+                        <li> http://192.168.25.120:8080/ </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>Enabled plugins</h4>
+                    <ul>
+                        <li> <h5>audit</h5>
+                            <ul>
+                                <li>xss</li>
+                                <li>sqli</li>
+                            </ul>
+                        </li>
+                        <li> <h5>infrastructure</h5>
+                            <ul>
+                            </ul>
+                        </li>
+                        <li> <h5>grep</h5>
+                            <ul>
+                                <li>symfony</li>
+                                <li>file_upload</li>
+                                <li>wsdl_greper</li>
+                                <li>form_autocomplete</li>
+                                <li>strange_parameters</li>
+                                <li>svn_users</li>
+                                <li>private_ip</li>
+                                <li>motw</li>
+                                <li>code_disclosure</li>
+                                <li>blank_body</li>
+                                <li>path_disclosure</li>
+                                <li>strange_http_codes</li>
+                                <li>http_auth_detect</li>
+                                <li>credit_cards</li>
+                                <li>dom_xss</li>
+                                <li>html_comments</li>
+                                <li>http_in_body</li>
+                                <li>dot_net_event_validation</li>
+                                <li>ssn</li>
+                                <li>error_500</li>
+                                <li>meta_tags</li>
+                                <li>lang</li>
+                                <li>click_jacking</li>
+                                <li>directory_indexing</li>
+                                <li>password_profiling</li>
+                                <li>get_emails</li>
+                                <li>hash_analysis</li>
+                                <li>error_pages</li>
+                                <li>strange_reason</li>
+                                <li>user_defined_regex</li>
+                                <li>strange_headers</li>
+                                <li>objects</li>
+                                <li>oracle</li>
+                                <li>feeds</li>
+                                <li>analyze_cookies</li>
+                            </ul>
+                        </li>
+                        <li> <h5>evasion</h5>
+                            <ul>
+                            </ul>
+                        </li>
+                        <li> <h5>crawl</h5>
+                            <ul>
+                                <li>web_spider</li>
+                            </ul>
+                        </li>
+                        <li> <h5>auth</h5>
+                            <ul>
+                            </ul>
+                        </li>
+                        <li> <h5>bruteforce</h5>
+                            <ul>
+                            </ul>
+                        </li>
+                        <li> <h5>output</h5>
+                            <ul>
+                                <li>html_file</li>
+                                <li>console</li>
+                            </ul>
+                        </li>
+                        <li> <h5>mangle</h5>
+                            <ul>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+
+    <div class="thumbnail">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    <p class="text-center">URLs found during application scan</p>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <ul>
+                </ul>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+    <div class="thumbnail">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    <p class="text-center">Scan log</p>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="20%">Timestamp</th>
+                            <th width="10%">Log level</th>
+                            <th width="70%">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                <tr class="danger">
+                                    <td>Fri Oct 11 11:02:26 2019</td>
+                                    <td>error</td>
+                                    <td>The following error was detected and could not be resolved:\nThe remote web server is not answering our HTTP requests, multiple errors have been found while trying to GET a response from the server.\n\nIn most cases this means that the configured target is incorrect, the port is closed, there is a firewall blocking our packets or there is no HTTP daemon listening on that port.\n\nPlease verify your target configuration and try again. The tested targets were:\n\n  - http://192.168.25.120:8080/\n\n\n</td>
+                                </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+</html>
